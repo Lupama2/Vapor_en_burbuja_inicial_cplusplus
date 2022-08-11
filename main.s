@@ -113,7 +113,7 @@ sigmaT:
 	.data
 	.align 4
 n_species:
-	.long	2
+	.long	5
 	.section .rdata,"dr"
 	.align 4
 _ZL7n_reacc:
@@ -127,8 +127,8 @@ Kappa_tabla:
 	.data
 	.align 8
 h:
-	.long	-1102028775
-	.long	975155446
+	.long	606885217
+	.long	912409806
 	.text
 	.globl	_Z1Rd
 	.def	_Z1Rd;	.scl	2;	.type	32;	.endef
@@ -821,7 +821,11 @@ _Z10reaccionesdPdS_:
 	shrq	$3, %rax
 	salq	$3, %rax
 	movq	%rax, -72(%rbp)
-	movsd	-96(%rbp), %xmm0
+	movsd	-96(%rbp), %xmm1
+	movsd	-88(%rbp), %xmm0
+	addsd	%xmm0, %xmm1
+	movsd	-80(%rbp), %xmm0
+	addsd	%xmm1, %xmm0
 	movq	-72(%rbp), %rax
 	movsd	%xmm0, (%rax)
 	movsd	-96(%rbp), %xmm0
@@ -829,6 +833,21 @@ _Z10reaccionesdPdS_:
 	xorpd	%xmm1, %xmm0
 	movq	-72(%rbp), %rax
 	movsd	%xmm0, 8(%rax)
+	movsd	-88(%rbp), %xmm0
+	movsd	-80(%rbp), %xmm1
+	subsd	%xmm1, %xmm0
+	movq	-72(%rbp), %rax
+	movsd	%xmm0, 16(%rax)
+	movsd	-88(%rbp), %xmm0
+	movq	.LC4(%rip), %xmm1
+	xorpd	%xmm1, %xmm0
+	movsd	-80(%rbp), %xmm1
+	subsd	%xmm1, %xmm0
+	movq	-72(%rbp), %rax
+	movsd	%xmm0, 24(%rax)
+	movsd	-80(%rbp), %xmm0
+	movq	-72(%rbp), %rax
+	movsd	%xmm0, 32(%rax)
 	movl	$0, -44(%rbp)
 .L32:
 	movl	n_species(%rip), %eax
@@ -942,6 +961,61 @@ _Z14imprimir_KappaiiPA9_d:
 	popq	%rbp
 	ret
 	.seh_endproc
+	.globl	_Z23imprimir_nro_particulasiPdd
+	.def	_Z23imprimir_nro_particulasiPdd;	.scl	2;	.type	32;	.endef
+	.seh_proc	_Z23imprimir_nro_particulasiPdd
+_Z23imprimir_nro_particulasiPdd:
+.LFB2476:
+	pushq	%rbp
+	.seh_pushreg	%rbp
+	movq	%rsp, %rbp
+	.seh_setframe	%rbp, 0
+	subq	$48, %rsp
+	.seh_stackalloc	48
+	.seh_endprologue
+	movl	%ecx, 16(%rbp)
+	movq	%rdx, 24(%rbp)
+	movsd	%xmm2, 32(%rbp)
+	movl	$10, %ecx
+	call	_ZSt12setprecisioni
+	movl	%eax, %edx
+	movq	.refptr._ZSt4cout(%rip), %rcx
+	call	_ZStlsIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_St13_Setprecision
+	movsd	32(%rbp), %xmm0
+	movapd	%xmm0, %xmm1
+	movq	%rax, %rcx
+	call	_ZNSolsEd
+	leaq	.LC8(%rip), %rdx
+	movq	%rax, %rcx
+	call	_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc
+	movl	$0, -4(%rbp)
+.L41:
+	movl	-4(%rbp), %eax
+	cmpl	16(%rbp), %eax
+	jge	.L40
+	movl	-4(%rbp), %eax
+	cltq
+	leaq	0(,%rax,8), %rdx
+	movq	24(%rbp), %rax
+	addq	%rdx, %rax
+	movsd	(%rax), %xmm0
+	movapd	%xmm0, %xmm1
+	movq	.refptr._ZSt4cout(%rip), %rcx
+	call	_ZNSolsEd
+	leaq	.LC8(%rip), %rdx
+	movq	%rax, %rcx
+	call	_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc
+	addl	$1, -4(%rbp)
+	jmp	.L41
+.L40:
+	movq	.refptr._ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_(%rip), %rdx
+	movq	.refptr._ZSt4cout(%rip), %rcx
+	call	_ZNSolsEPFRSoS_E
+	nop
+	addq	$48, %rsp
+	popq	%rbp
+	ret
+	.seh_endproc
 	.def	__main;	.scl	2;	.type	32;	.endef
 	.section .rdata,"dr"
 .LC9:
@@ -949,13 +1023,13 @@ _Z14imprimir_KappaiiPA9_d:
 .LC10:
 	.ascii "Kappa_qca.csv\0"
 .LC12:
-	.ascii "t\11O\11O2\0"
+	.ascii "t\11O\11O2\11H\11OH\11H2\0"
 	.text
 	.globl	main
 	.def	main;	.scl	2;	.type	32;	.endef
 	.seh_proc	main
 main:
-.LFB2476:
+.LFB2477:
 	pushq	%rbp
 	.seh_pushreg	%rbp
 	pushq	%r15
@@ -994,7 +1068,7 @@ main:
 	call	_ZNKSt9basic_iosIcSt11char_traitsIcEEcvbEv
 .LEHE1:
 	testb	%al, %al
-	je	.L40
+	je	.L43
 	movq	%rsp, %rax
 	movq	%rax, %rsi
 	leaq	-16(%rbp), %rax
@@ -1036,10 +1110,10 @@ main:
 	salq	$3, %rax
 	movq	%rax, 1048(%rbp)
 	movl	$0, 1072(%rbp)
-.L42:
+.L45:
 	movl	1072(%rbp), %eax
 	cmpl	1068(%rbp), %eax
-	jge	.L41
+	jge	.L44
 	leaq	16(%rbp), %rdx
 	leaq	528(%rbp), %rax
 	movl	$9, %r8d
@@ -1062,8 +1136,8 @@ main:
 	cltq
 	movq	%rcx, (%rdx,%rax,8)
 	addl	$1, 1072(%rbp)
-	jmp	.L42
-.L41:
+	jmp	.L45
+.L44:
 	movq	1048(%rbp), %rax
 	movsd	(%rax), %xmm0
 	movsd	%xmm0, tmax(%rip)
@@ -1089,7 +1163,7 @@ main:
 	movq	%rax, %rcx
 	call	_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED1Ev
 	movq	%rsi, %rsp
-.L40:
+.L43:
 	leaq	48(%rbp), %rax
 	movl	$8, %r8d
 	leaq	.LC10(%rip), %rdx
@@ -1104,7 +1178,7 @@ main:
 	call	_ZNKSt9basic_iosIcSt11char_traitsIcEEcvbEv
 .LEHE5:
 	testb	%al, %al
-	je	.L43
+	je	.L46
 	leaq	-16(%rbp), %rax
 	movq	%rax, %rcx
 	call	_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC1Ev
@@ -1118,13 +1192,13 @@ main:
 	movq	%rax, %rcx
 	call	_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC1Ev
 	movl	$0, 1076(%rbp)
-.L47:
+.L50:
 	cmpl	$2, 1076(%rbp)
-	jg	.L44
+	jg	.L47
 	movl	$0, 1080(%rbp)
-.L46:
+.L49:
 	cmpl	$7, 1080(%rbp)
-	jg	.L45
+	jg	.L48
 	leaq	16(%rbp), %rdx
 	leaq	48(%rbp), %rax
 	movl	$9, %r8d
@@ -1148,8 +1222,8 @@ main:
 	leaq	Kappa_tabla(%rip), %rax
 	movq	%r8, (%rdx,%rax)
 	addl	$1, 1080(%rbp)
-	jmp	.L46
-.L45:
+	jmp	.L49
+.L48:
 	leaq	16(%rbp), %rdx
 	leaq	48(%rbp), %rax
 	movl	$10, %r8d
@@ -1171,15 +1245,15 @@ main:
 	leaq	64+Kappa_tabla(%rip), %rax
 	movq	%rcx, (%rdx,%rax)
 	addl	$1, 1076(%rbp)
-	jmp	.L47
-.L44:
+	jmp	.L50
+.L47:
 	leaq	16(%rbp), %rax
 	movq	%rax, %rcx
 	call	_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED1Ev
 	leaq	-16(%rbp), %rax
 	movq	%rax, %rcx
 	call	_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED1Ev
-.L43:
+.L46:
 	movl	n_species(%rip), %eax
 	cltq
 	leaq	-1(%rax), %rdx
@@ -1209,20 +1283,32 @@ main:
 	pxor	%xmm0, %xmm0
 	movsd	%xmm0, (%rax)
 	addq	$8, %rax
+	subq	$1, %rdx
+	movsd	.LC11(%rip), %xmm0
+	movsd	%xmm0, (%rax)
+	addq	$8, %rax
+	subq	$1, %rdx
+	pxor	%xmm0, %xmm0
+	movsd	%xmm0, (%rax)
+	addq	$8, %rax
+	subq	$1, %rdx
+	pxor	%xmm0, %xmm0
+	movsd	%xmm0, (%rax)
+	addq	$8, %rax
 	leaq	-1(%rdx), %rcx
 	movsd	.LC11(%rip), %xmm0
 	movsd	%xmm0, (%rax)
 	leaq	8(%rax), %rdx
 	leaq	-1(%rcx), %rax
-.L49:
+.L52:
 	testq	%rax, %rax
-	js	.L48
+	js	.L51
 	pxor	%xmm0, %xmm0
 	movsd	%xmm0, (%rdx)
 	addq	$8, %rdx
 	subq	$1, %rax
-	jmp	.L49
-.L48:
+	jmp	.L52
+.L51:
 	movl	n_species(%rip), %eax
 	cltq
 	subq	$1, %rax
@@ -1256,7 +1342,7 @@ main:
 	movq	%rax, %rdx
 	movq	%rcx, %xmm0
 	call	_Z10reaccionesdPdS_
-	movl	$100000000, 1004(%rbp)
+	movl	$1000000000, 1004(%rbp)
 	leaq	.LC12(%rip), %rdx
 	movq	.refptr._ZSt4cout(%rip), %rcx
 .LEHB8:
@@ -1264,36 +1350,17 @@ main:
 	movq	.refptr._ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_(%rip), %rdx
 	movq	%rax, %rcx
 	call	_ZNSolsEPFRSoS_E
+	movq	1032(%rbp), %rdx
+	movl	n_species(%rip), %eax
 	movsd	1008(%rbp), %xmm0
-	movapd	%xmm0, %xmm1
-	movq	.refptr._ZSt4cout(%rip), %rcx
-	call	_ZNSolsEd
-	leaq	.LC8(%rip), %rdx
-	movq	%rax, %rcx
-	call	_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc
-	movq	%rax, %rdx
-	movq	1032(%rbp), %rax
-	movsd	(%rax), %xmm0
-	movapd	%xmm0, %xmm1
-	movq	%rdx, %rcx
-	call	_ZNSolsEd
-	leaq	.LC8(%rip), %rdx
-	movq	%rax, %rcx
-	call	_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc
-	movq	%rax, %rdx
-	movq	1032(%rbp), %rax
-	movsd	8(%rax), %xmm0
-	movapd	%xmm0, %xmm1
-	movq	%rdx, %rcx
-	call	_ZNSolsEd
-	movq	.refptr._ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_(%rip), %rdx
-	movq	%rax, %rcx
-	call	_ZNSolsEPFRSoS_E
+	movapd	%xmm0, %xmm2
+	movl	%eax, %ecx
+	call	_Z23imprimir_nro_particulasiPdd
 	movl	$0, 1084(%rbp)
-.L52:
+.L55:
 	movl	1084(%rbp), %eax
 	cmpl	1004(%rbp), %eax
-	jge	.L50
+	jge	.L53
 	cvtsi2sd	1084(%rbp), %xmm1
 	movsd	h(%rip), %xmm0
 	mulsd	%xmm1, %xmm0
@@ -1324,42 +1391,18 @@ main:
 	idivl	%ecx
 	movl	%edx, %eax
 	testl	%eax, %eax
-	jne	.L51
-	movl	$10, %ecx
-	call	_ZSt12setprecisioni
-	movl	%eax, %edx
-	movq	.refptr._ZSt4cout(%rip), %rcx
-	call	_ZStlsIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_St13_Setprecision
+	jne	.L54
+	movq	1032(%rbp), %rdx
+	movl	n_species(%rip), %eax
 	movsd	1008(%rbp), %xmm0
-	movapd	%xmm0, %xmm1
-	movq	%rax, %rcx
-	call	_ZNSolsEd
-	leaq	.LC8(%rip), %rdx
-	movq	%rax, %rcx
-	call	_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc
-	movq	%rax, %rdx
-	movq	1032(%rbp), %rax
-	movsd	(%rax), %xmm0
-	movapd	%xmm0, %xmm1
-	movq	%rdx, %rcx
-	call	_ZNSolsEd
-	leaq	.LC8(%rip), %rdx
-	movq	%rax, %rcx
-	call	_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc
-	movq	%rax, %rdx
-	movq	1032(%rbp), %rax
-	movsd	8(%rax), %xmm0
-	movapd	%xmm0, %xmm1
-	movq	%rdx, %rcx
-	call	_ZNSolsEd
-	movq	.refptr._ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_(%rip), %rdx
-	movq	%rax, %rcx
-	call	_ZNSolsEPFRSoS_E
+	movapd	%xmm0, %xmm2
+	movl	%eax, %ecx
+	call	_Z23imprimir_nro_particulasiPdd
 .LEHE8:
-.L51:
+.L54:
 	addl	$1, 1084(%rbp)
-	jmp	.L52
-.L50:
+	jmp	.L55
+.L53:
 	movl	$0, %ebx
 	leaq	48(%rbp), %rax
 	movq	%rax, %rcx
@@ -1369,23 +1412,7 @@ main:
 	call	_ZNSt14basic_ifstreamIcSt11char_traitsIcEED1Ev
 	movq	%rdi, %rsp
 	movl	%ebx, %eax
-	jmp	.L66
-.L62:
-	movq	%rax, %rbx
-	leaq	16(%rbp), %rax
-	movq	%rax, %rcx
-	call	_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED1Ev
-	jmp	.L55
-.L61:
-	movq	%rax, %rbx
-.L55:
-	leaq	-16(%rbp), %rax
-	movq	%rax, %rcx
-	call	_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED1Ev
-	movq	%rbx, %rax
-	movq	%rsi, %rsp
-	movq	%rax, %rbx
-	jmp	.L56
+	jmp	.L69
 .L65:
 	movq	%rax, %rbx
 	leaq	16(%rbp), %rax
@@ -1398,17 +1425,33 @@ main:
 	leaq	-16(%rbp), %rax
 	movq	%rax, %rcx
 	call	_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED1Ev
+	movq	%rbx, %rax
+	movq	%rsi, %rsp
+	movq	%rax, %rbx
+	jmp	.L59
+.L68:
+	movq	%rax, %rbx
+	leaq	16(%rbp), %rax
+	movq	%rax, %rcx
+	call	_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED1Ev
+	jmp	.L61
+.L67:
+	movq	%rax, %rbx
+.L61:
+	leaq	-16(%rbp), %rax
+	movq	%rax, %rcx
+	call	_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED1Ev
+	jmp	.L62
+.L66:
+	movq	%rax, %rbx
+.L62:
+	leaq	48(%rbp), %rax
+	movq	%rax, %rcx
+	call	_ZNSt14basic_ifstreamIcSt11char_traitsIcEED1Ev
 	jmp	.L59
 .L63:
 	movq	%rax, %rbx
 .L59:
-	leaq	48(%rbp), %rax
-	movq	%rax, %rcx
-	call	_ZNSt14basic_ifstreamIcSt11char_traitsIcEED1Ev
-	jmp	.L56
-.L60:
-	movq	%rax, %rbx
-.L56:
 	leaq	528(%rbp), %rax
 	movq	%rax, %rcx
 	call	_ZNSt14basic_ifstreamIcSt11char_traitsIcEED1Ev
@@ -1417,7 +1460,7 @@ main:
 .LEHB9:
 	call	_Unwind_Resume
 .LEHE9:
-.L66:
+.L69:
 	leaq	1096(%rbp), %rsp
 	popq	%rbx
 	popq	%rsi
@@ -1431,53 +1474,53 @@ main:
 	.def	__gxx_personality_seh0;	.scl	2;	.type	32;	.endef
 	.seh_handler	__gxx_personality_seh0, @unwind, @except
 	.seh_handlerdata
-.LLSDA2476:
+.LLSDA2477:
 	.byte	0xff
 	.byte	0xff
 	.byte	0x1
-	.uleb128 .LLSDACSE2476-.LLSDACSB2476
-.LLSDACSB2476:
-	.uleb128 .LEHB0-.LFB2476
+	.uleb128 .LLSDACSE2477-.LLSDACSB2477
+.LLSDACSB2477:
+	.uleb128 .LEHB0-.LFB2477
 	.uleb128 .LEHE0-.LEHB0
 	.uleb128 0
 	.uleb128 0
-	.uleb128 .LEHB1-.LFB2476
+	.uleb128 .LEHB1-.LFB2477
 	.uleb128 .LEHE1-.LEHB1
-	.uleb128 .L60-.LFB2476
+	.uleb128 .L63-.LFB2477
 	.uleb128 0
-	.uleb128 .LEHB2-.LFB2476
+	.uleb128 .LEHB2-.LFB2477
 	.uleb128 .LEHE2-.LEHB2
-	.uleb128 .L61-.LFB2476
+	.uleb128 .L64-.LFB2477
 	.uleb128 0
-	.uleb128 .LEHB3-.LFB2476
+	.uleb128 .LEHB3-.LFB2477
 	.uleb128 .LEHE3-.LEHB3
-	.uleb128 .L62-.LFB2476
+	.uleb128 .L65-.LFB2477
 	.uleb128 0
-	.uleb128 .LEHB4-.LFB2476
+	.uleb128 .LEHB4-.LFB2477
 	.uleb128 .LEHE4-.LEHB4
-	.uleb128 .L60-.LFB2476
+	.uleb128 .L63-.LFB2477
 	.uleb128 0
-	.uleb128 .LEHB5-.LFB2476
+	.uleb128 .LEHB5-.LFB2477
 	.uleb128 .LEHE5-.LEHB5
-	.uleb128 .L63-.LFB2476
+	.uleb128 .L66-.LFB2477
 	.uleb128 0
-	.uleb128 .LEHB6-.LFB2476
+	.uleb128 .LEHB6-.LFB2477
 	.uleb128 .LEHE6-.LEHB6
-	.uleb128 .L64-.LFB2476
+	.uleb128 .L67-.LFB2477
 	.uleb128 0
-	.uleb128 .LEHB7-.LFB2476
+	.uleb128 .LEHB7-.LFB2477
 	.uleb128 .LEHE7-.LEHB7
-	.uleb128 .L65-.LFB2476
+	.uleb128 .L68-.LFB2477
 	.uleb128 0
-	.uleb128 .LEHB8-.LFB2476
+	.uleb128 .LEHB8-.LFB2477
 	.uleb128 .LEHE8-.LEHB8
-	.uleb128 .L63-.LFB2476
+	.uleb128 .L66-.LFB2477
 	.uleb128 0
-	.uleb128 .LEHB9-.LFB2476
+	.uleb128 .LEHB9-.LFB2477
 	.uleb128 .LEHE9-.LEHB9
 	.uleb128 0
 	.uleb128 0
-.LLSDACSE2476:
+.LLSDACSE2477:
 	.text
 	.seh_endproc
 	.section	.text$_ZZN9__gnu_cxx6__stoaIddcJEEET0_PFT_PKT1_PPS3_DpT2_EPKcS5_PyS9_EN11_Save_errnoC1Ev,"x"
@@ -1487,7 +1530,7 @@ main:
 	.def	_ZZN9__gnu_cxx6__stoaIddcJEEET0_PFT_PKT1_PPS3_DpT2_EPKcS5_PyS9_EN11_Save_errnoC1Ev;	.scl	2;	.type	32;	.endef
 	.seh_proc	_ZZN9__gnu_cxx6__stoaIddcJEEET0_PFT_PKT1_PPS3_DpT2_EPKcS5_PyS9_EN11_Save_errnoC1Ev
 _ZZN9__gnu_cxx6__stoaIddcJEEET0_PFT_PKT1_PPS3_DpT2_EPKcS5_PyS9_EN11_Save_errnoC1Ev:
-.LFB2535:
+.LFB2536:
 	pushq	%rbp
 	.seh_pushreg	%rbp
 	movq	%rsp, %rbp
@@ -1516,7 +1559,7 @@ _ZZN9__gnu_cxx6__stoaIddcJEEET0_PFT_PKT1_PPS3_DpT2_EPKcS5_PyS9_EN11_Save_errnoC1
 	.def	_ZZN9__gnu_cxx6__stoaIddcJEEET0_PFT_PKT1_PPS3_DpT2_EPKcS5_PyS9_EN11_Save_errnoD1Ev;	.scl	2;	.type	32;	.endef
 	.seh_proc	_ZZN9__gnu_cxx6__stoaIddcJEEET0_PFT_PKT1_PPS3_DpT2_EPKcS5_PyS9_EN11_Save_errnoD1Ev
 _ZZN9__gnu_cxx6__stoaIddcJEEET0_PFT_PKT1_PPS3_DpT2_EPKcS5_PyS9_EN11_Save_errnoD1Ev:
-.LFB2538:
+.LFB2539:
 	pushq	%rbp
 	.seh_pushreg	%rbp
 	movq	%rsp, %rbp
@@ -1531,27 +1574,27 @@ _ZZN9__gnu_cxx6__stoaIddcJEEET0_PFT_PKT1_PPS3_DpT2_EPKcS5_PyS9_EN11_Save_errnoD1
 	testl	%eax, %eax
 	sete	%al
 	testb	%al, %al
-	je	.L70
+	je	.L73
 	movq	__imp__errno(%rip), %rax
 	call	*%rax
 	movq	%rax, %rdx
 	movq	16(%rbp), %rax
 	movl	(%rax), %eax
 	movl	%eax, (%rdx)
-.L70:
+.L73:
 	nop
 	addq	$32, %rsp
 	popq	%rbp
 	ret
 	.seh_handler	__gxx_personality_seh0, @unwind, @except
 	.seh_handlerdata
-.LLSDA2538:
+.LLSDA2539:
 	.byte	0xff
 	.byte	0xff
 	.byte	0x1
-	.uleb128 .LLSDACSE2538-.LLSDACSB2538
-.LLSDACSB2538:
-.LLSDACSE2538:
+	.uleb128 .LLSDACSE2539-.LLSDACSB2539
+.LLSDACSB2539:
+.LLSDACSE2539:
 	.section	.text$_ZZN9__gnu_cxx6__stoaIddcJEEET0_PFT_PKT1_PPS3_DpT2_EPKcS5_PyS9_EN11_Save_errnoD1Ev,"x"
 	.linkonce discard
 	.seh_endproc
@@ -1561,7 +1604,7 @@ _ZZN9__gnu_cxx6__stoaIddcJEEET0_PFT_PKT1_PPS3_DpT2_EPKcS5_PyS9_EN11_Save_errnoD1
 	.def	_ZZN9__gnu_cxx6__stoaIddcJEEET0_PFT_PKT1_PPS3_DpT2_EPKcS5_PyS9_EN10_Range_chk6_S_chkEdSt17integral_constantIbLb0EE;	.scl	2;	.type	32;	.endef
 	.seh_proc	_ZZN9__gnu_cxx6__stoaIddcJEEET0_PFT_PKT1_PPS3_DpT2_EPKcS5_PyS9_EN10_Range_chk6_S_chkEdSt17integral_constantIbLb0EE
 _ZZN9__gnu_cxx6__stoaIddcJEEET0_PFT_PKT1_PPS3_DpT2_EPKcS5_PyS9_EN10_Range_chk6_S_chkEdSt17integral_constantIbLb0EE:
-.LFB2539:
+.LFB2540:
 	pushq	%rbp
 	.seh_pushreg	%rbp
 	movq	%rsp, %rbp
@@ -1579,7 +1622,7 @@ _ZZN9__gnu_cxx6__stoaIddcJEEET0_PFT_PKT1_PPS3_DpT2_EPKcS5_PyS9_EN10_Range_chk6_S
 	.def	_ZN9__gnu_cxx6__stoaIddcJEEET0_PFT_PKT1_PPS3_DpT2_EPKcS5_PyS9_;	.scl	2;	.type	32;	.endef
 	.seh_proc	_ZN9__gnu_cxx6__stoaIddcJEEET0_PFT_PKT1_PPS3_DpT2_EPKcS5_PyS9_
 _ZN9__gnu_cxx6__stoaIddcJEEET0_PFT_PKT1_PPS3_DpT2_EPKcS5_PyS9_:
-.LFB2532:
+.LFB2533:
 	pushq	%rbp
 	.seh_pushreg	%rbp
 	pushq	%rbx
@@ -1610,52 +1653,52 @@ _ZN9__gnu_cxx6__stoaIddcJEEET0_PFT_PKT1_PPS3_DpT2_EPKcS5_PyS9_:
 	movq	%rax, -56(%rbp)
 	movq	-80(%rbp), %rax
 	cmpq	%rax, 16(%rbp)
-	jne	.L74
+	jne	.L77
 	movq	8(%rbp), %rax
 	movq	%rax, %rcx
 	call	_ZSt24__throw_invalid_argumentPKc
-.L74:
+.L77:
 	movq	__imp__errno(%rip), %rax
 	call	*%rax
 	movl	(%rax), %eax
 	cmpl	$34, %eax
-	je	.L75
+	je	.L78
 	movq	-56(%rbp), %rax
 	movl	%ebx, %edx
 	movq	%rax, %xmm0
 	call	_ZZN9__gnu_cxx6__stoaIddcJEEET0_PFT_PKT1_PPS3_DpT2_EPKcS5_PyS9_EN10_Range_chk6_S_chkEdSt17integral_constantIbLb0EE
 	testb	%al, %al
-	je	.L76
-.L75:
+	je	.L79
+.L78:
 	movl	$1, %eax
-	jmp	.L77
-.L76:
+	jmp	.L80
+.L79:
 	movl	$0, %eax
-.L77:
+.L80:
 	testb	%al, %al
-	je	.L78
+	je	.L81
 	movq	8(%rbp), %rax
 	movq	%rax, %rcx
 	call	_ZSt20__throw_out_of_rangePKc
 .LEHE11:
-.L78:
+.L81:
 	movsd	-56(%rbp), %xmm0
 	movsd	%xmm0, -64(%rbp)
 	cmpq	$0, 24(%rbp)
-	je	.L79
+	je	.L82
 	movq	-80(%rbp), %rax
 	subq	16(%rbp), %rax
 	movq	%rax, %rdx
 	movq	24(%rbp), %rax
 	movq	%rdx, (%rax)
-.L79:
+.L82:
 	movsd	-64(%rbp), %xmm6
 	leaq	-84(%rbp), %rax
 	movq	%rax, %rcx
 	call	_ZZN9__gnu_cxx6__stoaIddcJEEET0_PFT_PKT1_PPS3_DpT2_EPKcS5_PyS9_EN11_Save_errnoD1Ev
 	movq	%xmm6, %rax
-	jmp	.L83
-.L82:
+	jmp	.L86
+.L85:
 	movq	%rax, %rbx
 	leaq	-84(%rbp), %rax
 	movq	%rax, %rcx
@@ -1665,7 +1708,7 @@ _ZN9__gnu_cxx6__stoaIddcJEEET0_PFT_PKT1_PPS3_DpT2_EPKcS5_PyS9_:
 .LEHB12:
 	call	_Unwind_Resume
 .LEHE12:
-.L83:
+.L86:
 	movq	%rax, %xmm0
 	movaps	-48(%rbp), %xmm6
 	addq	$104, %rsp
@@ -1674,25 +1717,25 @@ _ZN9__gnu_cxx6__stoaIddcJEEET0_PFT_PKT1_PPS3_DpT2_EPKcS5_PyS9_:
 	ret
 	.seh_handler	__gxx_personality_seh0, @unwind, @except
 	.seh_handlerdata
-.LLSDA2532:
+.LLSDA2533:
 	.byte	0xff
 	.byte	0xff
 	.byte	0x1
-	.uleb128 .LLSDACSE2532-.LLSDACSB2532
-.LLSDACSB2532:
-	.uleb128 .LEHB10-.LFB2532
+	.uleb128 .LLSDACSE2533-.LLSDACSB2533
+.LLSDACSB2533:
+	.uleb128 .LEHB10-.LFB2533
 	.uleb128 .LEHE10-.LEHB10
 	.uleb128 0
 	.uleb128 0
-	.uleb128 .LEHB11-.LFB2532
+	.uleb128 .LEHB11-.LFB2533
 	.uleb128 .LEHE11-.LEHB11
-	.uleb128 .L82-.LFB2532
+	.uleb128 .L85-.LFB2533
 	.uleb128 0
-	.uleb128 .LEHB12-.LFB2532
+	.uleb128 .LEHB12-.LFB2533
 	.uleb128 .LEHE12-.LEHB12
 	.uleb128 0
 	.uleb128 0
-.LLSDACSE2532:
+.LLSDACSE2533:
 	.section	.text$_ZN9__gnu_cxx6__stoaIddcJEEET0_PFT_PKT1_PPS3_DpT2_EPKcS5_PyS9_,"x"
 	.linkonce discard
 	.seh_endproc
@@ -1702,7 +1745,7 @@ _ZN9__gnu_cxx6__stoaIddcJEEET0_PFT_PKT1_PPS3_DpT2_EPKcS5_PyS9_:
 	.def	_ZSt3powIdiEN9__gnu_cxx11__promote_2IT_T0_NS0_9__promoteIS2_XsrSt12__is_integerIS2_E7__valueEE6__typeENS4_IS3_XsrS5_IS3_E7__valueEE6__typeEE6__typeES2_S3_;	.scl	2;	.type	32;	.endef
 	.seh_proc	_ZSt3powIdiEN9__gnu_cxx11__promote_2IT_T0_NS0_9__promoteIS2_XsrSt12__is_integerIS2_E7__valueEE6__typeENS4_IS3_XsrS5_IS3_E7__valueEE6__typeEE6__typeES2_S3_
 _ZSt3powIdiEN9__gnu_cxx11__promote_2IT_T0_NS0_9__promoteIS2_XsrSt12__is_integerIS2_E7__valueEE6__typeENS4_IS3_XsrS5_IS3_E7__valueEE6__typeEE6__typeES2_S3_:
-.LFB2731:
+.LFB2732:
 	pushq	%rbp
 	.seh_pushreg	%rbp
 	movq	%rsp, %rbp
@@ -1726,7 +1769,7 @@ _ZSt3powIdiEN9__gnu_cxx11__promote_2IT_T0_NS0_9__promoteIS2_XsrSt12__is_integerI
 	.def	__tcf_0;	.scl	3;	.type	32;	.endef
 	.seh_proc	__tcf_0
 __tcf_0:
-.LFB3023:
+.LFB3024:
 	pushq	%rbp
 	.seh_pushreg	%rbp
 	movq	%rsp, %rbp
@@ -1744,7 +1787,7 @@ __tcf_0:
 	.def	_Z41__static_initialization_and_destruction_0ii;	.scl	3;	.type	32;	.endef
 	.seh_proc	_Z41__static_initialization_and_destruction_0ii
 _Z41__static_initialization_and_destruction_0ii:
-.LFB3022:
+.LFB3023:
 	pushq	%rbp
 	.seh_pushreg	%rbp
 	movq	%rsp, %rbp
@@ -1755,14 +1798,14 @@ _Z41__static_initialization_and_destruction_0ii:
 	movl	%ecx, 16(%rbp)
 	movl	%edx, 24(%rbp)
 	cmpl	$1, 16(%rbp)
-	jne	.L89
+	jne	.L92
 	cmpl	$65535, 24(%rbp)
-	jne	.L89
+	jne	.L92
 	leaq	_ZStL8__ioinit(%rip), %rcx
 	call	_ZNSt8ios_base4InitC1Ev
 	leaq	__tcf_0(%rip), %rcx
 	call	atexit
-.L89:
+.L92:
 	nop
 	addq	$32, %rsp
 	popq	%rbp
@@ -1771,7 +1814,7 @@ _Z41__static_initialization_and_destruction_0ii:
 	.def	_GLOBAL__sub_I_tmax;	.scl	3;	.type	32;	.endef
 	.seh_proc	_GLOBAL__sub_I_tmax
 _GLOBAL__sub_I_tmax:
-.LFB3024:
+.LFB3025:
 	pushq	%rbp
 	.seh_pushreg	%rbp
 	movq	%rsp, %rbp
@@ -1829,13 +1872,13 @@ _GLOBAL__sub_I_tmax:
 	.def	_ZNSolsEd;	.scl	2;	.type	32;	.endef
 	.def	_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc;	.scl	2;	.type	32;	.endef
 	.def	_ZNSolsEPFRSoS_E;	.scl	2;	.type	32;	.endef
+	.def	_ZStlsIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_St13_Setprecision;	.scl	2;	.type	32;	.endef
 	.def	_ZNSt14basic_ifstreamIcSt11char_traitsIcEEC1EPKcSt13_Ios_Openmode;	.scl	2;	.type	32;	.endef
 	.def	_ZNKSt9basic_iosIcSt11char_traitsIcEEcvbEv;	.scl	2;	.type	32;	.endef
 	.def	_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC1Ev;	.scl	2;	.type	32;	.endef
 	.def	_ZSt7getlineIcSt11char_traitsIcESaIcEERSt13basic_istreamIT_T0_ES7_RNSt7__cxx1112basic_stringIS4_S5_T1_EE;	.scl	2;	.type	32;	.endef
 	.def	_ZSt7getlineIcSt11char_traitsIcESaIcEERSt13basic_istreamIT_T0_ES7_RNSt7__cxx1112basic_stringIS4_S5_T1_EES4_;	.scl	2;	.type	32;	.endef
 	.def	_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED1Ev;	.scl	2;	.type	32;	.endef
-	.def	_ZStlsIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_St13_Setprecision;	.scl	2;	.type	32;	.endef
 	.def	_ZNSt14basic_ifstreamIcSt11char_traitsIcEED1Ev;	.scl	2;	.type	32;	.endef
 	.def	_Unwind_Resume;	.scl	2;	.type	32;	.endef
 	.def	_ZSt24__throw_invalid_argumentPKc;	.scl	2;	.type	32;	.endef

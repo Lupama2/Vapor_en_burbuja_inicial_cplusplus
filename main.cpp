@@ -1,12 +1,11 @@
 /*
 Burbuja_estatica_1_reaccion
-El objetivo es hacer la cuenta para una burbuja con R(t) dependiente del tiempo, T(t) = cte y considerando solo la reacción
-O + O -> O2
+El objetivo es hacer la cuenta para una burbuja con R(t) dependiente del tiempo, T(t) = cte y considerando las primeras 3 reacciones de la tesis de Gabriela.
 
 Resultado:
-A T = 6000K, R = R(t), h = 1.0e-20, explota el programa. En un único paso se producen partículas negativas y positivas (1.8e99)
-A T = 6000K, R = R(t), h = 1.0e-27, explota el programa. En un único paso se producen partículas negativas y positivas
-A T = 6000K, R = R(t), h = 1.0e-28 NO explota el programa y se conserva el nro de partículas
+A T = 6000K, R = R(t), h = 1.0e-45, explota el programa. En un único paso se producen partículas negativas y positivas.
+A T = 6000K, R = R(t), h = 1.0e-46 NO explota el programa y se conserva el nro de partículas, al menos hasta t = 1.0e-39
+
 
 Pegar en cmd para compilar y ejecutar el código:
 
@@ -37,14 +36,14 @@ double tmax, R0, Rmax, T0, Tmax, sigmaT;
 
 
 //Parámetros de las reacciones químicas
-int n_species = 2; //cantidad de especies que participan en las reacciones químicas
+int n_species = 5; //cantidad de especies que participan en las reacciones químicas
 int const n_reacc = 3;//cantidad de reacciones químicas consideradas
 
 //Defino la matriz Kappa que contendrá la info. de la tabla Kappa_qca
 double Kappa_tabla[n_reacc][9];
 
 //Parámetros del método numérico
-double h = 1.0e-28; //paso de integración
+double h = 1.0e-46; //paso de integración
 
 double R(double t){
     return 1.0e-2*((Rmax-R0)/tmax*t  + R0);
@@ -136,21 +135,18 @@ void reacciones(double t, double n[], double dndt[]){
     double x[n_species];
 
     //Por lo pronto sólo consideraré la reacción 0
-    x[0] = terminos_reacc[0];
-    x[1] = -terminos_reacc[0];
 
-    /*
-    #0:
-    x[0] = terminos_reacc[0] + terminos_reacc[1] + terminos_reacc[2]
-    #02:
-    x[1] = -terminos_reacc[0] 
-    #H:
-    x[2] = terminos_reacc[1] - terminos_reacc[2]
-    #OH: 
-    x[3] = -terminos_reacc[1] - terminos_reacc[2]
-    #H2
-    x[4] = terminos_reacc[2]
-    */
+    //0:
+    x[0] = terminos_reacc[0] + terminos_reacc[1] + terminos_reacc[2];
+    //02:
+    x[1] = -terminos_reacc[0];
+    //H:
+    x[2] = terminos_reacc[1] - terminos_reacc[2];
+    //OH: 
+    x[3] = -terminos_reacc[1] - terminos_reacc[2];
+    //H2
+    x[4] = terminos_reacc[2];
+
 
     for(int i = 0; i < n_species; ++i){
         dndt[i] = V(t)*x[i] + n[i]*dVdt(t)/V(t);}
@@ -163,6 +159,16 @@ void imprimir_Kappa(int nrow, int ncol, double tabla[][9]){
             cout << tabla[i][j] << "\t";}
         cout << endl;}
 }
+
+void imprimir_nro_particulas(int n_species, double n[],double t){
+    cout << setprecision(10) << t << "\t";
+    for(int i = 0; i<n_species; ++i){
+        cout << n[i] << "\t";
+
+    }
+    cout << endl;
+
+};
 
 int main(){
 
@@ -212,7 +218,7 @@ int main(){
     //Resuelvo el sistema de ecuaciones diferenciales con rk4 y hago print de la solución
 
     //Creo el vector de nro de partículas
-    double n[n_species] = {0.0,1.0e8};
+    double n[n_species] = {0.0,1.0e8,0.0,0.0,1.0e8};
 
     //Creo el vector de dndt y lo inicializo
     double dndt[n_species];
@@ -220,7 +226,7 @@ int main(){
     reacciones(t, n, dndt);
 
 
-    int n_steps = 1e8;
+    int n_steps = 1e9;
 
     // //Cantidad de pasos
     // n_steps = int(tmax/h);
@@ -228,14 +234,14 @@ int main(){
     // cout << h << endl << tmax << endl << tmax/h << endl << int ( tmax/h ) << endl ;
 
     //Avanzo t0 + h
-    cout << "t\tO\tO2" << endl;
-    cout  << t << "\t" << n[0] << "\t" << n[1] << endl;
+    cout << "t\tO\tO2\tH\tOH\tH2" << endl;
+    imprimir_nro_particulas(n_species, n, t);
 
     for(int i = 0; i < n_steps; ++i){
         t = i*h;
         rk4(n, dndt, t, h, n, reacciones);
         if(i%(n_steps/100) == 0){
-            cout << setprecision(10) << t << "\t" << n[0] << "\t" << n[1] << endl;}
+            imprimir_nro_particulas(n_species, n, t);}
 
     }
 
