@@ -26,6 +26,8 @@ Falta cambiar:
 #include <cmath> //para usar la exponencial
 #include <fstream> //para leer archivos
 #include <iomanip> //para usar setprecision
+#include "nr3.h" //para usar los códigos de numerical recipies sin necesidad de redefinir variables.
+#include "stepperdopr5.h" //para usar el stepperdorpr5, rk4 de paso adaptativo
 # define Pi 3.14159265358979323846 //Defino Pi:
 
 using namespace std;
@@ -171,7 +173,9 @@ void imprimir_nro_particulas(int n_species, double n[],double t){
 };
 
 int main(){
-
+    
+    n_species = 5;
+    //n_reacc = 3;
     //Importo los parámetros de la evolución del sistema
     ifstream iFile_parametros("parametros.csv");
     if(iFile_parametros) {

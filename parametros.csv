@@ -5,3 +5,4 @@ Rmax[m]	1000e-6
 T0[K]	300
 Tmax[K]	6000
 sigmaT[s]	1e-6
+n_species[adim]	5
