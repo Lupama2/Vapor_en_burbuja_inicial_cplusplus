@@ -3,5 +3,5 @@ tmax[s]	100e-6
 R0[m]	1e-6
 Rmax[m]	1000e-6
 T0[K]	300
-Tmax[K]	350
+Tmax[K]	6000
 sigmaT[s]	1e-6

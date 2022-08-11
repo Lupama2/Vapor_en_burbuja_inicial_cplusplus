@@ -1,6 +1,16 @@
-//Intento ir copiando lo que hizo Gabriela y creando código propio para resolver mi problema
-
 /*
+Burbuja_estatica_1_reaccion
+El objetivo es hacer la cuenta para una burbuja con R(t) = cte, T(t) = cte y considerando solo la reacción
+O + O -> O2
+
+Resultado:
+A T = 350K, R = Rmax, h = 1.0e-10, no se produce ninguna partícula de Oxígeno. Al parecer, se conserva el nro de partículas
+A T = 6000K, R = Rmax, h = 1.0e-10, explota el programa. En un único paso se producen partículas negativas y positivas (1.8e144)
+A T = 6000K, R = Rmax, h = 1.0e-20, con t<tmax. Se conserva el nro de partículas.
+
+
+
+
 Pegar en cmd para compilar y ejecutar el código:
 
 g++ -S main.cpp
@@ -14,12 +24,12 @@ Falta cambiar:
 *Cambiar de rk4 a rk45 para que el código ejecute más rápido
 *Considerar 3 reacciones
 
-
 */
 
 #include <iostream>
 #include <cmath> //para usar la exponencial
 #include <fstream> //para leer archivos
+#include <iomanip> //para usar setprecision
 # define Pi 3.14159265358979323846 //Defino Pi:
 
 using namespace std;
@@ -37,19 +47,25 @@ int const n_reacc = 3;//cantidad de reacciones químicas consideradas
 double Kappa_tabla[n_reacc][9];
 
 //Parámetros del método numérico
-double h = 1.0e-22; //paso de integración
+double h = 1.0e-20; //paso de integración
 
 double R(double t){
-    return 1.0e-2*((Rmax-R0)/tmax*t  + R0);}
+    return Rmax;
+    //return 1.0e-2*((Rmax-R0)/tmax*t  + R0);
+}
 
 double V(double t){
     return 4/3 * Pi * pow(R(t),3);}
 
 double dVdt(double t){
-    return 4*Pi*pow(R(t),2)*(Rmax-R0)/tmax;}
+    return 0;
+    //return 4*Pi*pow(R(t),2)*(Rmax-R0)/tmax;
+}
 
 double T(double t){
-    return (Tmax-T0)*exp(-0.5*pow(t/sigmaT,2)) + T0;}
+    return Tmax;
+    //return (Tmax-T0)*exp(-0.5*pow(t/sigmaT,2)) + T0;
+}
 
 double Kappa(int j, bool direction, double T_){
     /*Constante de la cinética química de la reacción j a temperatura T.
@@ -179,6 +195,7 @@ int main(){
         sigmaT = parametros[5];
     }
 
+
     //Importo la tabla Kappa_qca que contiene la info. de la tabla 2.2.4.1 de la tesis de Gabriela. Guardo la info. en Kappa_tabla
     ifstream iFile_Kappa("Kappa_qca.csv");
     if(iFile_Kappa) {
@@ -208,19 +225,25 @@ int main(){
     reacciones(t, n, dndt);
 
 
-    //Avanzo t0 + h
-    cout << "0\tO2" << endl;
-    cout << n[0] << "\t" << n[1] << endl;
+    int n_steps = 1e7;
 
-    int n_steps = 1e9;
+    // //Cantidad de pasos
+    // n_steps = int(tmax/h);
+    // cout << "n steps: " << n_steps << endl;
+    // cout << h << endl << tmax << endl << tmax/h << endl << int ( tmax/h ) << endl ;
+
+    //Avanzo t0 + h
+    cout << "t\tO\tO2" << endl;
+    cout  << t << "\t" << n[0] << "\t" << n[1] << endl;
+
     for(int i = 0; i < n_steps; ++i){
         t = i*h;
         rk4(n, dndt, t, h, n, reacciones);
         if(i%(n_steps/100) == 0){
-            cout << t << "\t" << n[0] << "\t" << n[1] << endl;}
+            cout << setprecision(10) << t << "\t" << n[0] << "\t" << n[1] << endl;}
+
     }
 
-    
 
     return 0;
 
