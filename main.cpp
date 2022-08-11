@@ -1,15 +1,12 @@
 /*
 Burbuja_estatica_1_reaccion
-El objetivo es hacer la cuenta para una burbuja con R(t) = cte, T(t) = cte y considerando solo la reacción
+El objetivo es hacer la cuenta para una burbuja con R(t) dependiente del tiempo, T(t) = cte y considerando solo la reacción
 O + O -> O2
 
 Resultado:
-A T = 350K, R = Rmax, h = 1.0e-10, no se produce ninguna partícula de Oxígeno. Al parecer, se conserva el nro de partículas
-A T = 6000K, R = Rmax, h = 1.0e-10, explota el programa. En un único paso se producen partículas negativas y positivas (1.8e144)
-A T = 6000K, R = Rmax, h = 1.0e-20, con t<tmax. Se conserva el nro de partículas.
-
-
-
+A T = 6000K, R = R(t), h = 1.0e-20, explota el programa. En un único paso se producen partículas negativas y positivas (1.8e99)
+A T = 6000K, R = R(t), h = 1.0e-27, explota el programa. En un único paso se producen partículas negativas y positivas
+A T = 6000K, R = R(t), h = 1.0e-28 NO explota el programa y se conserva el nro de partículas
 
 Pegar en cmd para compilar y ejecutar el código:
 
@@ -47,19 +44,17 @@ int const n_reacc = 3;//cantidad de reacciones químicas consideradas
 double Kappa_tabla[n_reacc][9];
 
 //Parámetros del método numérico
-double h = 1.0e-20; //paso de integración
+double h = 1.0e-28; //paso de integración
 
 double R(double t){
-    return Rmax;
-    //return 1.0e-2*((Rmax-R0)/tmax*t  + R0);
+    return 1.0e-2*((Rmax-R0)/tmax*t  + R0);
 }
 
 double V(double t){
     return 4/3 * Pi * pow(R(t),3);}
 
 double dVdt(double t){
-    return 0;
-    //return 4*Pi*pow(R(t),2)*(Rmax-R0)/tmax;
+    return 4*Pi*pow(R(t),2)*(Rmax-R0)/tmax;
 }
 
 double T(double t){
@@ -225,7 +220,7 @@ int main(){
     reacciones(t, n, dndt);
 
 
-    int n_steps = 1e7;
+    int n_steps = 1e8;
 
     // //Cantidad de pasos
     // n_steps = int(tmax/h);

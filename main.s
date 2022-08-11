@@ -127,8 +127,8 @@ Kappa_tabla:
 	.data
 	.align 8
 h:
-	.long	210911779
-	.long	1002937505
+	.long	-1102028775
+	.long	975155446
 	.text
 	.globl	_Z1Rd
 	.def	_Z1Rd;	.scl	2;	.type	32;	.endef
@@ -142,6 +142,16 @@ _Z1Rd:
 	.seh_endprologue
 	movsd	%xmm0, 16(%rbp)
 	movsd	Rmax(%rip), %xmm0
+	movsd	R0(%rip), %xmm1
+	subsd	%xmm1, %xmm0
+	movsd	tmax(%rip), %xmm1
+	divsd	%xmm1, %xmm0
+	movapd	%xmm0, %xmm1
+	mulsd	16(%rbp), %xmm1
+	movsd	R0(%rip), %xmm0
+	addsd	%xmm0, %xmm1
+	movsd	.LC1(%rip), %xmm0
+	mulsd	%xmm1, %xmm0
 	movq	%xmm0, %rax
 	movq	%rax, %xmm0
 	popq	%rbp
@@ -167,7 +177,7 @@ _Z1Vd:
 	movq	%rax, %xmm0
 	call	_ZSt3powIdiEN9__gnu_cxx11__promote_2IT_T0_NS0_9__promoteIS2_XsrSt12__is_integerIS2_E7__valueEE6__typeENS4_IS3_XsrS5_IS3_E7__valueEE6__typeEE6__typeES2_S3_
 	movapd	%xmm0, %xmm1
-	movsd	.LC1(%rip), %xmm0
+	movsd	.LC2(%rip), %xmm0
 	mulsd	%xmm1, %xmm0
 	movq	%xmm0, %rax
 	movq	%rax, %xmm0
@@ -184,11 +194,28 @@ _Z4dVdtd:
 	.seh_pushreg	%rbp
 	movq	%rsp, %rbp
 	.seh_setframe	%rbp, 0
+	subq	$32, %rsp
+	.seh_stackalloc	32
 	.seh_endprologue
 	movsd	%xmm0, 16(%rbp)
-	pxor	%xmm0, %xmm0
+	movsd	16(%rbp), %xmm0
+	call	_Z1Rd
+	movq	%xmm0, %rax
+	movl	$2, %edx
+	movq	%rax, %xmm0
+	call	_ZSt3powIdiEN9__gnu_cxx11__promote_2IT_T0_NS0_9__promoteIS2_XsrSt12__is_integerIS2_E7__valueEE6__typeENS4_IS3_XsrS5_IS3_E7__valueEE6__typeEE6__typeES2_S3_
+	movapd	%xmm0, %xmm1
+	movsd	.LC3(%rip), %xmm0
+	mulsd	%xmm0, %xmm1
+	movsd	Rmax(%rip), %xmm0
+	movsd	R0(%rip), %xmm2
+	subsd	%xmm2, %xmm0
+	mulsd	%xmm1, %xmm0
+	movsd	tmax(%rip), %xmm1
+	divsd	%xmm1, %xmm0
 	movq	%xmm0, %rax
 	movq	%rax, %xmm0
+	addq	$32, %rsp
 	popq	%rbp
 	ret
 	.seh_endproc
@@ -263,7 +290,7 @@ _Z5Kappaibd:
 	movq	%rax, %rdx
 	leaq	32+Kappa_tabla(%rip), %rax
 	movsd	(%rdx,%rax), %xmm0
-	movq	.LC3(%rip), %xmm1
+	movq	.LC4(%rip), %xmm1
 	xorpd	%xmm1, %xmm0
 	divsd	32(%rbp), %xmm0
 	call	exp
@@ -304,7 +331,7 @@ _Z5Kappaibd:
 	movq	%rax, %rdx
 	leaq	56+Kappa_tabla(%rip), %rax
 	movsd	(%rdx,%rax), %xmm0
-	movq	.LC3(%rip), %xmm1
+	movq	.LC4(%rip), %xmm1
 	xorpd	%xmm1, %xmm0
 	divsd	32(%rbp), %xmm0
 	call	exp
@@ -428,11 +455,11 @@ _Z3rk4PdS_ddS_PFvdS_S_E:
 	salq	$3, %rax
 	movq	%rax, -56(%rbp)
 	movsd	120(%rbp), %xmm1
-	movsd	.LC4(%rip), %xmm0
+	movsd	.LC6(%rip), %xmm0
 	mulsd	%xmm1, %xmm0
 	movsd	%xmm0, -64(%rbp)
 	movsd	120(%rbp), %xmm0
-	movsd	.LC5(%rip), %xmm1
+	movsd	.LC7(%rip), %xmm1
 	divsd	%xmm1, %xmm0
 	movsd	%xmm0, -72(%rbp)
 	movsd	112(%rbp), %xmm0
@@ -685,7 +712,7 @@ _Z10reaccionesdPdS_:
 	movl	$0, %ecx
 	call	_Z5Kappaibd
 	movapd	%xmm0, %xmm1
-	movq	.LC3(%rip), %xmm0
+	movq	.LC4(%rip), %xmm0
 	movapd	%xmm1, %xmm6
 	xorpd	%xmm0, %xmm6
 	movq	-56(%rbp), %rax
@@ -715,7 +742,7 @@ _Z10reaccionesdPdS_:
 	movl	$1, %ecx
 	call	_Z5Kappaibd
 	movapd	%xmm0, %xmm1
-	movq	.LC3(%rip), %xmm0
+	movq	.LC4(%rip), %xmm0
 	xorpd	%xmm0, %xmm1
 	movq	-56(%rbp), %rax
 	movsd	(%rax), %xmm0
@@ -745,7 +772,7 @@ _Z10reaccionesdPdS_:
 	movl	$2, %ecx
 	call	_Z5Kappaibd
 	movapd	%xmm0, %xmm1
-	movq	.LC3(%rip), %xmm0
+	movq	.LC4(%rip), %xmm0
 	xorpd	%xmm0, %xmm1
 	movq	-56(%rbp), %rax
 	movsd	(%rax), %xmm0
@@ -798,7 +825,7 @@ _Z10reaccionesdPdS_:
 	movq	-72(%rbp), %rax
 	movsd	%xmm0, (%rax)
 	movsd	-96(%rbp), %xmm0
-	movq	.LC3(%rip), %xmm1
+	movq	.LC4(%rip), %xmm1
 	xorpd	%xmm1, %xmm0
 	movq	-72(%rbp), %rax
 	movsd	%xmm0, 8(%rax)
@@ -855,7 +882,7 @@ _Z10reaccionesdPdS_:
 	ret
 	.seh_endproc
 	.section .rdata,"dr"
-.LC6:
+.LC8:
 	.ascii "\11\0"
 	.text
 	.globl	_Z14imprimir_KappaiiPA9_d
@@ -898,7 +925,7 @@ _Z14imprimir_KappaiiPA9_d:
 	movapd	%xmm0, %xmm1
 	movq	.refptr._ZSt4cout(%rip), %rcx
 	call	_ZNSolsEd
-	leaq	.LC6(%rip), %rdx
+	leaq	.LC8(%rip), %rdx
 	movq	%rax, %rcx
 	call	_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc
 	addl	$1, -8(%rbp)
@@ -917,11 +944,11 @@ _Z14imprimir_KappaiiPA9_d:
 	.seh_endproc
 	.def	__main;	.scl	2;	.type	32;	.endef
 	.section .rdata,"dr"
-.LC7:
+.LC9:
 	.ascii "parametros.csv\0"
-.LC8:
-	.ascii "Kappa_qca.csv\0"
 .LC10:
+	.ascii "Kappa_qca.csv\0"
+.LC12:
 	.ascii "t\11O\11O2\0"
 	.text
 	.globl	main
@@ -955,7 +982,7 @@ main:
 	movq	%rax, %rdi
 	leaq	528(%rbp), %rax
 	movl	$8, %r8d
-	leaq	.LC7(%rip), %rdx
+	leaq	.LC9(%rip), %rdx
 	movq	%rax, %rcx
 .LEHB0:
 	call	_ZNSt14basic_ifstreamIcSt11char_traitsIcEEC1EPKcSt13_Ios_Openmode
@@ -1065,7 +1092,7 @@ main:
 .L40:
 	leaq	48(%rbp), %rax
 	movl	$8, %r8d
-	leaq	.LC8(%rip), %rdx
+	leaq	.LC10(%rip), %rdx
 	movq	%rax, %rcx
 .LEHB4:
 	call	_ZNSt14basic_ifstreamIcSt11char_traitsIcEEC1EPKcSt13_Ios_Openmode
@@ -1183,7 +1210,7 @@ main:
 	movsd	%xmm0, (%rax)
 	addq	$8, %rax
 	leaq	-1(%rdx), %rcx
-	movsd	.LC9(%rip), %xmm0
+	movsd	.LC11(%rip), %xmm0
 	movsd	%xmm0, (%rax)
 	leaq	8(%rax), %rdx
 	leaq	-1(%rcx), %rax
@@ -1229,8 +1256,8 @@ main:
 	movq	%rax, %rdx
 	movq	%rcx, %xmm0
 	call	_Z10reaccionesdPdS_
-	movl	$10000000, 1004(%rbp)
-	leaq	.LC10(%rip), %rdx
+	movl	$100000000, 1004(%rbp)
+	leaq	.LC12(%rip), %rdx
 	movq	.refptr._ZSt4cout(%rip), %rcx
 .LEHB8:
 	call	_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc
@@ -1241,7 +1268,7 @@ main:
 	movapd	%xmm0, %xmm1
 	movq	.refptr._ZSt4cout(%rip), %rcx
 	call	_ZNSolsEd
-	leaq	.LC6(%rip), %rdx
+	leaq	.LC8(%rip), %rdx
 	movq	%rax, %rcx
 	call	_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc
 	movq	%rax, %rdx
@@ -1250,7 +1277,7 @@ main:
 	movapd	%xmm0, %xmm1
 	movq	%rdx, %rcx
 	call	_ZNSolsEd
-	leaq	.LC6(%rip), %rdx
+	leaq	.LC8(%rip), %rdx
 	movq	%rax, %rcx
 	call	_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc
 	movq	%rax, %rdx
@@ -1307,7 +1334,7 @@ main:
 	movapd	%xmm0, %xmm1
 	movq	%rax, %rcx
 	call	_ZNSolsEd
-	leaq	.LC6(%rip), %rdx
+	leaq	.LC8(%rip), %rdx
 	movq	%rax, %rcx
 	call	_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc
 	movq	%rax, %rdx
@@ -1316,7 +1343,7 @@ main:
 	movapd	%xmm0, %xmm1
 	movq	%rdx, %rcx
 	call	_ZNSolsEd
-	leaq	.LC6(%rip), %rdx
+	leaq	.LC8(%rip), %rdx
 	movq	%rax, %rcx
 	call	_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc
 	movq	%rax, %rdx
@@ -1766,24 +1793,32 @@ _GLOBAL__sub_I_tmax:
 	.section .rdata,"dr"
 	.align 8
 .LC1:
+	.long	1202590843
+	.long	1065646817
+	.align 8
+.LC2:
 	.long	1413754136
 	.long	1074340347
-	.align 16
+	.align 8
 .LC3:
+	.long	1413754136
+	.long	1076437499
+	.align 16
+.LC4:
 	.long	0
 	.long	-2147483648
 	.long	0
 	.long	0
 	.align 8
-.LC4:
+.LC6:
 	.long	0
 	.long	1071644672
 	.align 8
-.LC5:
+.LC7:
 	.long	0
 	.long	1075314688
 	.align 8
-.LC9:
+.LC11:
 	.long	0
 	.long	1100470148
 	.ident	"GCC: (x86_64-posix-seh, Built by strawberryperl.com project) 8.3.0"
