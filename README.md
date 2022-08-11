@@ -7,9 +7,9 @@ Para resolverlas se emplean los métodos numéricos
 *Rkqc.cpp: runge kutta ferber
 *Rkutta4.cpp: rungekutta4
 
-En base a la tabla 2.2.4.1 de la tesis de Gabriela, consideraremos que no hay M (catalizador) ni N (nitrógeno). Si bien el interés principal resulta usar deuterio, emplearemos por lo pronto hidrógeno. En base a esto, las únicas reacciones que ocurren son 3, 4, 7 y 8.
+En base a la tabla 2.2.4.1 de la tesis de Gabriela, consideraremos que no hay N (nitrógeno) y en las reacciones con M (catalizador), éste no está presente pero la reacción ocurre de todos modos. Si bien el interés principal resulta usar deuterio, emplearemos por lo pronto hidrógeno. En base a esto, las únicas reacciones que ocurren son 1 a 8, a partir de ahora denominadas como de 0 a 7.
 
-
+Las variables que nos interesan calcular son el nro de partículas de las distintas especies en el tiempo. 
 
 
 
@@ -17,4 +17,12 @@ Mantener los parámetros Temporal integration control
 y0 es la cantidda inicial de partículas. Va a ser dato cuántas moléculas de cada cosa hay. También va a ser dato la T_inicial. T(t) hay que calcularlo tmb.
 
 
-R(t) lo consideramos lineal.
+
+
+
+g++ -S main.cpp
+g++ -c main.cpp
+g++ -o main.exe main.o
+main.exe
+
+ -std=c++11
