@@ -49,7 +49,7 @@ Falta cambiar:
 #include <fstream> //para leer archivos
 #include <iomanip> //para usar setprecision
 #define Pi 3.14159265358979323846 //Defino Pi:
-#define Na //defino el nro de avogadro
+#define Na 6.0221367E23 //defino el nro de avogadro
 
 
 using namespace std;
@@ -197,18 +197,20 @@ void rk4_adap_nTot_controller(double y[], double dydx[], const double t0, const 
     double dt_min = hmin;
 
     //Set relative change tolerances.
-    double diffy_max = 1.0e3;  //Diferencia absoluta más grande que soy capaz de aceptar. Si es más grande, achico h
-    double diffy_min = 1.0e2; //Diferencia absoluta más pequeña que soy capaz de aceptar. Si es más chica, agrando h
+    double diffy_max = 1.0e-3;  //Diferencia absoluta más grande que soy capaz de aceptar. Si es más grande, achico h
+    double diffy_min = 1.0e-4; //Diferencia absoluta más pequeña que soy capaz de aceptar. Si es más chica, agrando h
     double y_tol = 1.0e-3; //Límite
 
     //Calculo la cantidad de partículas iniciales
     double n_tot = norma(y);
     
+    int contador = 0;
+
     while (t < tfinal){
-        if(t>1.0e-038){
+        ++contador;
+        if(contador%100000 == 0){
             imprimir_nro_particulas(n_species, y, t);
         }
-        
         //Calculate partial steps.
         double step_y[n_species];
         rk4(y , dydx , t , dt , step_y , derivs);
