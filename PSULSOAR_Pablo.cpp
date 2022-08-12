@@ -106,7 +106,7 @@ void parametros(){
    yndif=0;
 
    //Numeros
-   NumEsp=6; //Numero de especies totales
+   NumEsp=8; //Numero de especies totales
    Nvar=NumEsp;
 
    //Masas Molares D2O

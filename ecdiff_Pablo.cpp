@@ -100,7 +100,7 @@ void derivada(double t,double *y,double TB, double mp,double k,
 
    double f1,f2,f3,f4,f5,Pp;
 
-   int Nvar2=(NCh3-1);
+   int Nvar2=3;
 
    //definicion de las 45 reacciones pertenecientes a los 16 reactivos + gas noble
    //rf reaccion forward, rb reaccion backward
