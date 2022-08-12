@@ -15,7 +15,7 @@ Las variables que nos interesan calcular son el nro de partículas de las distin
 
 Mantener los parámetros Temporal integration control
 y0 es la cantidda inicial de partículas. Va a ser dato cuántas moléculas de cada cosa hay. También va a ser dato la T_inicial. T(t) hay que calcularlo tmb.
-
+ 4.096e-043
 
 
 

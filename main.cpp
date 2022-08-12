@@ -3,9 +3,9 @@ Burbuja_estatica_1_reaccion
 El objetivo es hacer la cuenta para una burbuja con R(t) dependiente del tiempo, T(t) = cte y considerando las primeras 3 reacciones de la tesis de Gabriela.
 
 Resultado:
-A T = 6000K, R = R(t), h = 1.0e-45, explota el programa. En un único paso se producen partículas negativas y positivas.
-A T = 6000K, R = R(t), h = 1.0e-46 NO explota el programa y se conserva el nro de partículas, al menos hasta t = 1.0e-39
-
+A T = 6000K el código funciona con el RK4_adaptativo que aprendí en el video
+https://www.youtube.com/watch?v=JcRsGD2pKlA
+PERO aún así tarda mucho en hacer las cuentas y tiene el problema de que produce cantidades negativas de partículas que se pueden controlar medianamente con los parámetros diffy_max y diffy_min.
 
 Pegar en cmd para compilar y ejecutar el código:
 
@@ -26,9 +26,7 @@ Falta cambiar:
 #include <cmath> //para usar la exponencial
 #include <fstream> //para leer archivos
 #include <iomanip> //para usar setprecision
-#include "nr3.h" //para usar los códigos de numerical recipies sin necesidad de redefinir variables.
-#include "stepperdopr5.h" //para usar el stepperdorpr5, rk4 de paso adaptativo
-# define Pi 3.14159265358979323846 //Defino Pi:
+#define Pi 3.14159265358979323846 //Defino Pi:
 
 using namespace std;
 
@@ -38,7 +36,7 @@ double tmax, R0, Rmax, T0, Tmax, sigmaT;
 
 
 //Parámetros de las reacciones químicas
-int n_species = 5; //cantidad de especies que participan en las reacciones químicas
+int const n_species = 5; //cantidad de especies que participan en las reacciones químicas
 int const n_reacc = 3;//cantidad de reacciones químicas consideradas
 
 //Defino la matriz Kappa que contendrá la info. de la tabla Kappa_qca
@@ -111,6 +109,321 @@ void rk4(double y[], double dydx[], const double x, const double h, double yout[
         yout[i]=y[i]+h6*(dydx[i]+dyt[i]+2.0*dym[i]);
 }
 
+double norma(double y[n_species]){
+    double suma = 0;
+    for(int i=0; i <n_species; ++i ){
+        suma = suma + abs(y[i]); //Calculo el valor absoluto para que las partículas "negativas" cuenten como "positivas" y eso salte en el método.
+    }
+    return abs(suma);
+}
+
+void igualar(double y[n_species], double y_[n_species]){
+    //Iguala el array de la izquierda al de la derecha
+    for(int i=0; i <n_species; ++i ){
+        y[i] = y_[i];
+    }
+
+}
+
+
+void imprimir_nro_particulas(int n_species, double n[],double t){
+    cout << setprecision(10) << t << "\t";
+    for(int i = 0; i<n_species; ++i){
+        cout << n[i] << "\t";
+
+    }
+    cout << endl;
+
+};
+
+void rk4_adap_nTot_controller(double y[], double dydx[], const double t0, const double tfinal, const double h0, const double hmin, double yout[], void (*derivs)(const double, double*, double*)){
+    
+    //Condiciones iniciales
+    double t = t0;
+
+    //Set initial step size.
+    double dt = h0;
+
+    //Set minimal step size.
+    double dt_min = hmin;
+
+    //Set relative change tolerances.
+    double diffy_max = 1.0e3;  //Diferencia absoluta más grande que soy capaz de aceptar. Si es más grande, achico h
+    double diffy_min = 1.0e2; //Diferencia absoluta más pequeña que soy capaz de aceptar. Si es más chica, agrando h
+    double y_tol = 1.0e-3; //Límite
+
+    //Calculo la cantidad de partículas iniciales
+    double n_tot = norma(y);
+    
+    while (t < tfinal){
+        imprimir_nro_particulas(n_species, y, t);
+        //Calculate partial steps.
+        double step_y[n_species];
+        rk4(y , dydx , t , dt , step_y , derivs);
+        
+        //Calculate partial steps.
+        double half_step_y[n_species];
+        rk4(y , dydx , t , dt/2 , half_step_y , derivs);
+        
+        //Calculate partial steps.
+        double dble_step_y[n_species];
+        rk4(y , dydx , t , 2*dt , dble_step_y , derivs);
+
+        double norma_step_y = norma(step_y);
+        if(norma_step_y < y_tol){ //Use a fixed step size for small values of y.
+            if (dt != dt_min){
+                //cout << "New step size\t" << dt_min << endl;
+                dt = dt_min;}
+            igualar(yout,step_y);}
+        else{
+            //Calcular diferencia entre step_y y half_step_y
+            double half_diff[n_species];
+            for(int i = 0; i<n_species; ++i){
+                half_diff[i] = step_y[i] - half_step_y[i];
+            }
+
+            //Calcular diferencia entre step_y y dble_step_y
+            double dble_diff[n_species];
+            for(int i = 0; i<n_species; ++i){
+                dble_diff[i] = step_y[i] - dble_step_y[i];
+            }
+            if(norma_step_y > y_tol && norma(half_diff) > diffy_max){
+                dt = dt/2; //Error is too large; decrease step size.
+                //cout << "New step size\t" << dt << endl;
+                igualar(yout,yout); //No igualo yout a half_step_y porque quizás
+                continue;              
+                }
+            if (norma_step_y > y_tol && norma(dble_diff) < diffy_min){
+                //cout << "\nTEST: " << dble_diff[0] << dble_diff[1] << dble_diff[2] << dble_diff[3] << dble_diff[4] << endl;
+                dt = dt*2; //Larger error is acceptable; increase step size.}
+                //cout << "New step size\t" << dt <<endl;
+                igualar(yout,dble_step_y);
+                igualar(y,yout);
+                t = t + dt;}
+            else{
+                igualar(yout,step_y);
+                igualar(y,yout);
+                t = t + dt;} //This step size is just right.
+        }
+
+    }
+}
+
+/*
+void rk4_adap_nTot_controller(double y[], double dydx[], const double t0, const double tfinal, const double h0, const double hmin, double yout[], void (*derivs)(const double, double*, double*)){
+    
+    //Condiciones iniciales
+    double t = t0;
+
+    //Set initial step size.
+    double dt = h0;
+
+    //Set minimal step size.
+    double dt_min = hmin;
+
+    //Set relative change tolerances.
+    double diffy_max = 0.01;  //Diferencia absoluta más grande que soy capaz de aceptar. Si es más grande, achico h
+    double diffy_min = 0.001; //Diferencia absoluta más pequeña que soy capaz de aceptar. Si es más chica, agrando h
+    double y_tol = 1.0e-3; //Límite
+
+    //Calculo la cantidad de partículas iniciales
+    double n_tot = norma(y);
+    
+    while (t < tfinal){
+        imprimir_nro_particulas(n_species, y, t);
+        //Calculate partial steps.
+        double step_y[n_species];
+        rk4(y , dydx , t , dt , step_y , derivs);
+        
+        //Calculate partial steps.
+        double half_step_y[n_species];
+        rk4(y , dydx , t , dt/2 , half_step_y , derivs);
+        
+        //Calculate partial steps.
+        double dble_step_y[n_species];
+        rk4(y , dydx , t , 2*dt , dble_step_y , derivs);
+
+        double norma_step_y = norma(step_y);
+        if(norma_step_y < y_tol){ //Use a fixed step size for small values of y.
+            if (dt != dt_min){
+                cout << "New step size\t" << dt_min << endl;
+                dt = dt_min;}
+            igualar(yout,step_y);}
+        else{
+            //Calcular diferencia entre step_y y half_step_y
+            double half_diff[n_species];
+            for(int i = 0; i<n_species; ++i){
+                half_diff[i] = step_y[i] - half_step_y[i];
+            }
+
+            //Calcular diferencia entre step_y y dble_step_y
+            double dble_diff[n_species];
+            for(int i = 0; i<n_species; ++i){
+                dble_diff[i] = step_y[i] - dble_step_y[i];
+            }
+            if(norma_step_y > y_tol && norma(half_diff) > diffy_max){
+                dt = dt/2; //Error is too large; decrease step size.
+                cout << "New step size\t" << dt << endl;
+                igualar(yout,half_step_y);               
+                }
+            if (norma_step_y > y_tol && norma(dble_diff) < diffy_min){
+                //cout << "\nTEST: " << dble_diff[0] << dble_diff[1] << dble_diff[2] << dble_diff[3] << dble_diff[4] << endl;
+                dt = dt*2; //Larger error is acceptable; increase step size.}
+                cout << "New step size\t" << dt <<endl;
+                igualar(yout,dble_step_y);}
+            else{
+                igualar(yout,step_y);} //This step size is just right.
+        }
+        igualar(y,yout);
+        t = t + dt;
+    }
+}
+
+void rk4_adap(double y[], double dydx[], const double t0, const double tfinal, const double h0, const double hmin,double yout[], void (*derivs)(const double, double*, double*)){
+    
+    //Condiciones iniciales
+    double t = t0;
+
+    //Set initial step size.
+    double dt = h0;
+
+    //Set minimal step size.
+    double dt_min = hmin;
+
+    //Set relative change tolerances.
+    double dy_max = 0.01;  //Enables faster speed.
+    double dy_min = 0.008; //Controls accuracy.
+    double y_tol = 1.0e-3; //Límite que denota cuando hay que cambiar de step.
+
+
+    while (t < tfinal){
+        imprimir_nro_particulas(n_species, y, t);
+        //Calculate partial steps.
+        double step_y[n_species];
+        rk4(y , dydx , t , dt , step_y , derivs);
+        
+        //Calculate partial steps.
+        double half_step_y[n_species];
+        rk4(y , dydx , t , dt , half_step_y , derivs);
+        
+        //Calculate partial steps.
+        double dble_step_y[n_species];
+        rk4(y , dydx , t , dt , dble_step_y , derivs);
+
+        double norma_step_y = norma(step_y);
+        if(norma_step_y < y_tol){ //Use a fixed step size for small values of y.
+            if (dt != dt_min){
+                cout << "New step size\t" << dt_min << endl;
+                dt = dt_min;}
+            igualar(yout,step_y);}
+        else{
+            //Calcular diferencia entre step_y y half_step_y
+            double half_diff[n_species];
+            for(int i = 0; i<n_species; ++i){
+                half_diff[i] = step_y[i] - half_step_y[i];
+            }
+
+            //Calcular diferencia entre step_y y dble_step_y
+            double dble_diff[n_species];
+            for(int i = 0; i<n_species; ++i){
+                dble_diff[i] = step_y[i] - dble_step_y[i];
+            }
+
+            if(norma_step_y > y_tol && norma(half_diff)/norma_step_y > dy_max){
+                dt = dt/2; //Error is too large; decrease step size.
+                cout << "New step size\t" << dt << endl;
+                igualar(yout,half_step_y);}
+            if (norma_step_y > y_tol && norma(dble_diff)/norma_step_y < dy_min){
+                dt = dt*2; //Larger error is acceptable; increase step size.
+                cout << "New step size\t" << dt <<endl;
+                igualar(yout,dble_step_y);}
+            else{
+                igualar(yout,step_y);} //This step size is just right.
+        }
+        igualar(y,yout);
+        t = t + dt;
+    }
+}
+
+/*
+
+graph(fast=False)
+fun_graph = gcurve(color=color.red, markers=True)
+
+def fun(t,x):
+    # This is the right-hand side of the first-order ordinary differential 
+    # equation dx/dt = fun.
+#    fun = 3*t**2 
+    fun = exp(x)-x*exp(t) 
+    return fun
+    
+# Set initial conditions.
+t = 0
+x = 0.02
+
+# Set initial step size.
+dt = 1e-1
+
+# Set minimal step size.
+dt_min = 1e-3
+
+# Set relative change tolerances.
+dx_max = 0.01  # Enables faster speed.
+dx_min = 0.008 # Controls accuracy.
+x_tol = 1e-3
+
+while (t < 5):
+    rate(100)
+    
+    # Calculate partial steps.
+    k1 = fun(t,      x)
+    k2 = fun(t+dt/2, x+dt*k1/2)
+    k3 = fun(t+dt/2, x+dt*k2/2)
+    k4 = fun(t+dt,   x+dt*k3)
+    # Combine partial steps.
+    step_x = x + dt/6*(k1+2*k2+2*k3+k4)
+
+    # Calculate partial steps.
+    k2 = fun(t+dt/4, x+dt*k1/4)
+    k3 = fun(t+dt/4, x+dt*k2/4)
+    k4 = fun(t+dt/2, x+dt*k3/2)
+    # Combine partial steps.
+    half_step_x = x + dt/12*(k1+2*k2+2*k3+k4)
+
+    # Calculate partial steps.
+    k2 = fun(t+dt,   x+dt*k1)
+    k3 = fun(t+dt,   x+dt*k2)
+    k4 = fun(t+2*dt, x+2*dt*k3)
+    # Combine partial steps.
+    dble_step_x = x + dt/3*(k1+2*k2+2*k3+k4)
+
+    if (abs(step_x) < x_tol): # Use a fixed step size for small values of x.
+        if (dt != dt_min):
+            print("New step size",dt_min)
+            dt = dt_min
+        new_x = step_x
+    else:
+        if (abs(step_x) > x_tol and abs(step_x-half_step_x)/abs(step_x) > dx_max):
+            dt = dt/2 # Error is too large; decrease step size.
+            print("New step size",dt)
+            new_x = half_step_x
+        else if (abs(step_x) > x_tol and abs(step_x-dble_step_x)/abs(step_x) < dx_min):
+            dt = dt*2 # Larger error is acceptable; increase step size.
+            print("New step size",dt)
+            new_x = dble_step_x
+        else:
+            new_x = step_x # This step size is just right.
+
+    x = new_x
+    t = t + dt
+    
+    
+    fun_graph.plot(pos=(t,x))
+
+
+*/
+
+
 void reacciones(double t, double n[], double dndt[]){
     /*
     n a priori tiene 3 componentes:
@@ -162,20 +475,9 @@ void imprimir_Kappa(int nrow, int ncol, double tabla[][9]){
         cout << endl;}
 }
 
-void imprimir_nro_particulas(int n_species, double n[],double t){
-    cout << setprecision(10) << t << "\t";
-    for(int i = 0; i<n_species; ++i){
-        cout << n[i] << "\t";
-
-    }
-    cout << endl;
-
-};
 
 int main(){
     
-    n_species = 5;
-    //n_reacc = 3;
     //Importo los parámetros de la evolución del sistema
     ifstream iFile_parametros("parametros.csv");
     if(iFile_parametros) {
@@ -236,7 +538,12 @@ int main(){
     // n_steps = int(tmax/h);
     // cout << "n steps: " << n_steps << endl;
     // cout << h << endl << tmax << endl << tmax/h << endl << int ( tmax/h ) << endl ;
+    double tfinal = n_steps/h;
+    rk4_adap_nTot_controller(n, dndt, t, tfinal, h, h, n, reacciones);
 
+
+    
+/*
     //Avanzo t0 + h
     cout << "t\tO\tO2\tH\tOH\tH2" << endl;
     imprimir_nro_particulas(n_species, n, t);
@@ -248,7 +555,7 @@ int main(){
             imprimir_nro_particulas(n_species, n, t);}
 
     }
-
+*/
 
     return 0;
 
