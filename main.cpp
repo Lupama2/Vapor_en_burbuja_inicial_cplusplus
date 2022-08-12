@@ -49,6 +49,8 @@ Falta cambiar:
 #include <fstream> //para leer archivos
 #include <iomanip> //para usar setprecision
 #define Pi 3.14159265358979323846 //Defino Pi:
+#define Na //defino el nro de avogadro
+
 
 using namespace std;
 
@@ -91,9 +93,9 @@ double Kappa(int j, bool direction, double T_){
     */
     //La matriz se llama Kappa_tabla
     if(direction == false)
-        return Kappa_tabla[j][2]*pow(T_,Kappa_tabla[j][3])*exp(-Kappa_tabla[j][4]/T_);
+        return Kappa_tabla[j][2]*pow(T_,Kappa_tabla[j][3])*exp(-Kappa_tabla[j][4]/T_)*(1.0e-6)/Na;
     if(direction == true)
-        return Kappa_tabla[j][5]*pow(T_,Kappa_tabla[j][6])*exp(-Kappa_tabla[j][7]/T_);
+        return Kappa_tabla[j][5]*pow(T_,Kappa_tabla[j][6])*exp(-Kappa_tabla[j][7]/T_)*(1.0e-6)/Na;
     else
         return 0;
 
