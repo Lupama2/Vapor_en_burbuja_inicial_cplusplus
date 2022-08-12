@@ -1,6 +1,8 @@
 # Vapor_en_burbuja_inicial_cplusplus
 Vapor en la burbuja inicial. Código en C++
 
+TEST
+
 El proceso que se busca simular trata de las reacciones químicas en el vapor en una cavidad esférica cuyo radio R(t) depende del tiempo de forma lineal. En definitiva, calcularemos la cinética química hasta la máxima expansión. El objetivo es verificar si en la máxima expansión sólo hay H20 vapor y no otras moléculas. Para esto hay que resolver un sistema de ecuaciones deferenciales, presentes en ecdiff.cpp
 
 Para resolverlas se emplean los métodos numéricos
