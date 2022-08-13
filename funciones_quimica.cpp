@@ -4,9 +4,10 @@ Funciones necesarias para la evolución química del sistema.
 
 */
 #include <cmath> //para usar la exponencial
-#include "parametros.h" //importo los parámetros y sus valores.
-#define Pi 3.14159265358979323846 //Defino Pi:
+//#include "parametros.h" //importo los parámetros y sus valores.
 
+
+#define Pi 3.14159265358979323846 //Defino Pi:
 
 double R(double t){
     return 1.0e-2*((Rmax-R0)/tmax*t  + R0);

@@ -61,12 +61,16 @@ Lo dejé corriendo un buen rato y llegó a
 
 #define Na 6.0221367E23 //defino el nro de avogadro
 
-
 using namespace std;
 
 
+//Agrego por las dudas:
+// #define NOMINMAX
+// #include <windows.h>
+
 //Parámetros de las reacciones químicas y de la evolución del sistema
 #include "parametros.cpp"
+
 /*
 Se están incluyendo los parámetros:
 n_species //cantidad de especies que participan en las reacciones químicas
@@ -82,233 +86,34 @@ double Kappa_tabla[n_reacc][9];
 double h = 1.0e-46; //paso de integración
 
 //Declaro funciones que están definidas en funciones_quimicas.cpp
-double R(double t);
-double V(double t);
-double dVdt(double t);
-double T(double t);
+#include "funciones_quimica.cpp"
+// double R(double t);
+// double V(double t);
+// double dVdt(double t);
+// double T(double t);
+
+
 
 //Declaro funciones que están definidas en funciones_math.cpp
-double norma(double y[n_species]);
-void igualar(double y[n_species], double y_[n_species]);
-void difference(double diff[n_species], double a[n_species], double b[n_species]);
-void imprimir_nro_particulas(int n_species, double n[],double t);
-void imprimir_Kappa(int nrow, int ncol, double tabla[][9]);
+#include "funciones_math.cpp"
+// double norma(double y[n_species]);
+// void igualar(double y[n_species], double y_[n_species]);
+// void difference(double diff[n_species], double a[n_species], double b[n_species]);
+// void imprimir_nro_particulas(int n_species, double n[],double t);
+// void imprimir_Kappa(int nrow, int ncol, double tabla[][9]);
+
+//Incluyo las ecuaciones diferenciales a resolver
+#include "ecsdiff.cpp"
 
 
-
-
-double Kappa(int j, bool direction, double T_, double Kappa_tabla[][9]){
-    /*Constante de la cinética química de la reacción j a temperatura T.
-    direction indica si es forward (0) or backwards (1)
-    En la tesis de Gabriela esta constante está enflobada en k*T^c*exp(-E/KT)
-    El orden en los arrays es el orden de las reacciones en la tesis de Gabriela, salteando las que involucran Nitrógeno
-    */
-    //La matriz se llama Kappa_tabla
-    if(direction == false)
-        return Kappa_tabla[j][2]*pow(T_,Kappa_tabla[j][3])*exp(-Kappa_tabla[j][4]/T_)*(1.0e-6)/Na;
-    if(direction == true)
-        return Kappa_tabla[j][5]*pow(T_,Kappa_tabla[j][6])*exp(-Kappa_tabla[j][7]/T_)*(1.0e-6)/Na;
-    else
-        return 0;
-
-
-
-    /*
-   r[0]=pow(VolExcl,t1)*1.2e17*(1.0e-12)*(ntot/V)*(y[Nvar+3]/V)*(y[Nvar+3]/V)*
-   pow(y[3],-1.0)*exp(-0.0/y[3])/Na/Na;
-
-   r[1]=3.16e19*(1.0e-6)*(ntot/V)*(y[Nvar+4]/V)*pow(y[3],-1.3)*exp(-59893.0/y[3])/Na;
-
-   r[2]=pow(VolExcl,t2)*5.0e17*(1.0e-12)*(ntot/V)*(y[Nvar+3]/V)*(y[Nvar+2]/V)*
-   pow(y[3],-1.0)*exp(-0.0/y[3])/Na/Na;
-
-   r[3]=3.54e17*(1.0e-6)*(ntot/V)*(y[Nvar+5]/V)*pow(y[3],-0.9)*exp(-51217.0/y[3])/Na;
-
-   r[4]=3.87e4*(1.0e-6)*(y[Nvar+3]/V)*(y[Nvar+1]/V)*pow(y[3],2.7)*exp(-3150.0/y[3])/Na;
-
-   r[5]=1.79e4*(1.0e-6)*(y[Nvar+2]/V)*(y[Nvar+5]/V)*pow(y[3],2.7)*exp(-2200.0/y[3])/Na;
-    */
-}
-
-void rk4(double y[], double dydx[], const double x, const double h, double yout[], void (*derivs)(const double, double*, double*)){
-    /*Lo copié línea a línea de Numerical Recipies y lo modifiqué para suar arrays nativos
-    Qué significa cada input:
-    Given values for the variables y[0..n-1] and their derivatives dydx[0..n-1] known at x, use
-    the fourth-order Runge-Kutta method to advance the solution over an interval h and return
-    the incremented variables as yout[0..n-1]. The user supplies the routine derivs(x,y,dydx),
-    which returns derivatives dydx at x.
-
-    y[0...n-1] valor de las variables en x
-    dydx[0...n-1] valor de la derivada en x
-    x: t0
-    h: intervalo
-    yout[0...n-1] valor de las variables en x + h
-    derivs(x,y,dydx) rutina que calcula las derivadas dydx en x y las carga en el array dydx
-    */
-    int n=n_species;
-    double dym[n],dyt[n],yt[n];
-    double hh=h*0.5;
-    double h6=h/6.0;
-    double xh=x+hh;
-    for (int i=0;i<n;i++) yt[i]=y[i]+hh*dydx[i];
-    derivs(xh,yt,dyt);
-    for (int i=0;i<n;i++) yt[i]=y[i]+hh*dyt[i];
-    derivs(xh,yt,dym);
-    for (int i=0;i<n;i++) {
-        yt[i]=y[i]+h*dym[i];
-        dym[i] += dyt[i];
-        }
-    derivs(x+h,yt,dyt);
-    for (int i=0;i<n;i++)
-        yout[i]=y[i]+h6*(dydx[i]+dyt[i]+2.0*dym[i]);
-}
-
-
-
-
-void rk4_adap_nTot_controller(double *y, double *dydx, const double t0, const double tfinal, const double h0, const double hmin, double *yout, void (*derivs)(const double, double*, double*)){
-    
-    //Condiciones iniciales
-    double t = t0;
-
-    //Set initial step size.
-    double dt = h0;
-
-    //Set minimal step size.
-    double dt_min = hmin;
-
-    //Set relative change tolerances.
-    double diffy_max = 1.0e-3;  //Diferencia absoluta más grande que soy capaz de aceptar. Si es más grande, achico h
-    double diffy_min = 1.0e-4; //Diferencia absoluta más pequeña que soy capaz de aceptar. Si es más chica, agrando h
-    double y_tol = 1.0e-3; //Límite
-
-    //Calculo la cantidad de partículas iniciales
-    double n_tot = norma(y);
-    
-    int contador = 0;
-
-    while (t < tfinal){
-        ++contador;
-        if(contador%100000 == 0){
-            imprimir_nro_particulas(n_species, y, t);
-        }
-        //Calculate partial steps.
-        double step_y[n_species];
-        rk4(y , dydx , t , dt , step_y , derivs);
-        double norma_step_y = norma(step_y);
-
-        //Calculate partial steps.
-        double half_step_y[n_species];
-        rk4(y , dydx , t , dt/2 , half_step_y , derivs);
-        //Calcular diferencia entre step_y y half_step_y
-        double half_diff[n_species];
-        difference(half_diff, step_y, half_step_y);
-
-
-        if(norma_step_y > y_tol && norma(half_diff) > diffy_max){
-            dt = dt/2; //Error is too large; decrease step size.
-            //cout << "New step size\t" << dt << endl;
-            //No igualo yout a half_step_y porque quizás no sea un paso lo suficientemente chico. Vuelvo a hacer todo el procedimiento devuelta.
-            continue;              
-            }
-
-        //Calculate partial steps.
-        double dble_step_y[n_species];
-        rk4(y , dydx , t , 2*dt , dble_step_y , derivs);
-        //Calcular diferencia entre step_y y dble_step_y
-        double dble_diff[n_species];
-        difference(dble_diff, step_y, dble_step_y);
-
-        if (norma_step_y > y_tol && norma(dble_diff) < diffy_min){
-            //cout << "\nTEST: " << dble_diff[0] << dble_diff[1] << dble_diff[2] << dble_diff[3] << dble_diff[4] << endl;
-            dt = dt*2; //Larger error is acceptable; increase step size.}
-            //cout << "New step size\t" << dt <<endl;
-            igualar(y,dble_step_y);
-            t = t + dt;}
-        else{
-            igualar(y,step_y);
-            t = t + dt;} //This step size is just right.
-        
-
-    }
-}
-
-void reacciones(double t, double n[], double dndt[]){
-    /*
-    n a priori tiene 3 componentes:
-    n = [0, 02, H, OH, H2]
-
-    A modo gral:
-    dn/dt = V*(cambios debido a las reacciones) + n/V dV/dt
-    donde V es el volumen de la burbuja y n el nro de partículas de una determinada especie
-    Aquí se resumen la parte derecha de la igualdad. La expresión se construye en base a las reacciones listadas en la tesis de Gabriela
-
-    Calcula dndt[0...n-1] a tiempo t a partir de n[0...n-1].
-    */
-
-    //Creo el vector de concentraciones para facilitar la nomenclatura.
-    double C[n_species];
-    for(int i = 0; i<n_species; ++i){C[i] = n[i]/V(t);}
-
-    //Términos asocioados a cada reacción. Hacen referencia a la reacción forward
-    double terminos_reacc[n_reacc];
-    terminos_reacc[0] = -Kappa(0,0,T(t), Kappa_tabla)*pow(C[0],2) + Kappa(0,1,T(t), Kappa_tabla)*C[1];
-    terminos_reacc[1] = -Kappa(1,0,T(t), Kappa_tabla)*C[0]*C[2] + Kappa(1,1,T(t), Kappa_tabla)*C[3];
-    terminos_reacc[2] = -Kappa(2,0,T(t), Kappa_tabla)*C[0]*C[4] + Kappa(2,1,T(t), Kappa_tabla)*C[2]*C[3];
-
-    double x[n_species];
-
-    //Por lo pronto sólo consideraré la reacción 0
-
-    //0:
-    x[0] = terminos_reacc[0] + terminos_reacc[1] + terminos_reacc[2];
-    //02:
-    x[1] = -terminos_reacc[0];
-    //H:
-    x[2] = terminos_reacc[1] - terminos_reacc[2];
-    //OH: 
-    x[3] = -terminos_reacc[1] - terminos_reacc[2];
-    //H2
-    x[4] = terminos_reacc[2];
-
-
-    for(int i = 0; i < n_species; ++i){
-        dndt[i] = V(t)*x[i] + n[i]*dVdt(t)/V(t);}
-
-}
+//Incluyo los métodos numéricos a utilizar
+#include "metodos_numericos.cpp"
 
 
 
 int main(){
     
     
-    /*
-    //Importo los parámetros de la evolución del sistema
-    ifstream iFile_parametros("parametros.csv");
-    if(iFile_parametros) {
-        //Importo la 1er fila, allí están los nombres de las variables.
-        string cabecera; getline (iFile_parametros, cabecera);
-        //Cargo los demás datos
-        string x;
-        int n_parameter = 6; //nro de parametros
-        double parametros[n_parameter];
-        for(int i = 0; i < n_parameter; ++i){
-            //El primer elemento es el nombre de la variable
-            getline(iFile_parametros, x, '\t');
-            //El segundo es el nro que nos interesa
-            getline(iFile_parametros, x, '\n');
-            parametros[i] = stod(x);}
-        //Asigno los valores cargados a las variables:
-        tmax = parametros[0];
-        R0 = parametros[1];
-        Rmax = parametros[2];
-        T0 = parametros[3];
-        Tmax = parametros[4];
-        sigmaT = parametros[5];
-    }
-    */
-
-
     //Importo la tabla Kappa_qca que contiene la info. de la tabla 2.2.4.1 de la tesis de Gabriela. Guardo la info. en Kappa_tabla
     ifstream iFile_Kappa("Kappa_qca.csv");
     if(iFile_Kappa) {
@@ -325,30 +130,95 @@ int main(){
             Kappa_tabla[i][8] = stod(x);}
     }
 
-    //Importo los parámetros del método numérico
 
-    //Resuelvo el sistema de ecuaciones diferenciales con rk4 y hago print de la solución
 
     //Creo el vector de nro de partículas
     double n[n_species] = {0.0,1.0e8,0.0,0.0,1.0e8};
 
     //Creo el vector de dndt y lo inicializo
     double dndt[n_species];
-    double t = 0.0;
+    double t=0.0; //Inicializacion del tiempo
     reacciones(t, n, dndt);
+    imprimir_nro_particulas(n_species, n, t);
 
 
-    int n_steps = 1e9;
 
-    // //Cantidad de pasos
-    // n_steps = int(tmax/h);
-    // cout << "n steps: " << n_steps << endl;
-    // cout << h << endl << tmax << endl << tmax/h << endl << int ( tmax/h ) << endl ;
-    double tfinal = n_steps/h;
-    rk4_adap_nTot_controller(n, dndt, t, tfinal, h, h, n, reacciones);
+    //Uso rkqc
+    
 
+    //Temporal integration control
+    double eps=1.0e-7;//error
+    //Gabriela:
+    //double step=1.0e-11; //Time step [s]
+    //double hmin=1.0e-16; //el paso minimo que debe tener en cuenta
+    //Pablo:
+    double step=1.0e-15; //Time step [s]
+    double hmin=1.0e-20; //el paso minimo que debe tener en cuenta
+    // numciclos=1; //numero de ciclos que calcula NO USADO
+    // epsilon=1.0e-6; //Convergence criterion para las cantidades que se calculan con el metodo de biseccion[1]
+    // N=100; // cantidad de pasos utilizados psara integrar la funcion error (ERF())
+
+    double htry=step; //Inicializacion del paso optativo
+    double hdid=step; // Inicializacion del paso anterior
+    double hnext=step; // Inicializacion del paso siguiente
 
     
+    //Creo el vector nout para guardar los resultados de un único paso del método numérico
+    double nout[n_species];
+    //Creo el vectoy yscal y lo inicializo. No sé lo que hace pero el método lo necesita
+    double yscal[n_species];
+    for(int i = 0; i < n_species; ++i){
+        yscal[i] = R(0);}
+    //Esto en base al código de Gabriela que se inicializa como:
+    // for(i=0;i<Nvar;i++)
+    //     yscal[i]=y[1];
+    //donde y[1]=Ri; //Inicializacion del radio
+
+    double tfin = 1.0e-10; //tiempo final de la integración
+    while(t<tfin){
+        //Hago un paso:
+        rkqc(n,dndt,&t,n_species, hmin, htry, eps, yscal, &hdid, &hnext, nout, derivada);
+
+        htry=hnext;
+
+        //Actualizo los valores:
+        for(int i=0;i<n_species;i++){
+            n[i]=nout[i];
+        }
+        //Los imprimo:
+        imprimir_nro_particulas(n_species, n, t);
+
+        //Asumo que lo siguiente no es importante y lo comento. Creo que hace referencia a las variables R, V, T, dVdt,...
+        // for(int i=1;i<6;i++)
+        //     yscal[i]=n[i]+hdid*yscal[i];
+
+        //No sé lo que hacen los siguientes lazos for pero los uso por las dudas:
+        for(int i = 0; i<n_species;i++)
+            yscal[i]=(fabs(n[i])+hdid*fabs(yscal[i])); //fabs() calcula el valor absoluto
+
+        //Creo que el lazo anterior da un sentido de escala para calcular un error relativo dentro de rkqc(). Si tal es el caso, no sé por qué se inicializa con el valor del radio incial
+
+        for(int i=0;i<n_species;i++){
+            if(n[i]==0)
+            yscal[i]=1000000000.0;
+        }
+
+    }
+
+
+
+//    y[0]=0.0;
+//    
+//    y[2]=Vi; //Inicializacion de la velocidad
+//    y[3]=Tinf; // Inicializacion de la temperatura
+//    nh2o0=Na*pvap0*(4.0/3.0*pi*y[1]*y[1]*y[1])/Rg/(Tinf); //beta*Na*pvap0*(4.0/3.0*3.14159*pow(Rprueba,3.0))/Rg/T0;
+//    y[4]=nh2o0;//cantidad de particulas iniciales de vapor de agua
+//    y[5]=Tinf; // Inicializacion de la temperatura de la pared de la burbuja en la cara externa
+//    //RAr=pow(pow(Ri,3.0)-pow(Rgas,3.0),1./3.0);
+//    nAr=Na*P0*4.0/3.0*3.14159*pow(R0i,3.0)/Rg/T0
+
+
+
 /*
     //Avanzo t0 + h
     cout << "t\tO\tO2\tH\tOH\tH2" << endl;

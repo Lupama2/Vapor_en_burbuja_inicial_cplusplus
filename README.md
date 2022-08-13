@@ -19,3 +19,18 @@ g++ -S main.cpp funciones_math.cpp funciones_quimica.cpp parametros.cpp
 g++ -c main.cpp funciones_math.cpp funciones_quimica.cpp parametros.cpp
 g++ -o main.exe main.o funciones_math.o funciones_quimica.o parametros.o
 main.exe
+
+
+
+Si importo los parametros con
+#include parametros.cpp
+ya estoy incluyendo los parámetros al construir el main.o porque #include parametros.cpp lo que hace es copiar exactamente lo que está ahí y ponerlo donde yo le digo. De este modo, si luego hago
+g++ -o main.exe main.o parametros.o
+Estoy llamando DEVUELTA a parametros.o y redefiniendo los parámetros
+
+En tal caso, debería ejecutar:
+
+g++ -S main.cpp
+g++ -c main.cpp
+g++ -o main.exe main.o
+main.exe

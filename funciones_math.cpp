@@ -12,7 +12,7 @@ Funciones matemáticas
 
 using namespace std;
 
-#include "parametros.h" //importo los parámetros y sus valores.
+//#include "parametros.h" //importo los parámetros y sus valores.
 
 double norma(double *y){
     double suma = 0;
@@ -55,3 +55,4 @@ void imprimir_Kappa(int nrow, int ncol, double tabla[][9]){
             cout << tabla[i][j] << "\t";}
         cout << endl;}
 }
+

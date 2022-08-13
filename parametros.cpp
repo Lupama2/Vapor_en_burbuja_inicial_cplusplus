@@ -1,4 +1,3 @@
-
 //Parámetros de la evolución química del sistema
 double tmax = 100e-6;
 double R0 = 1e-6;
