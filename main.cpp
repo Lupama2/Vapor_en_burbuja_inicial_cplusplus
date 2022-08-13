@@ -58,20 +58,22 @@ Lo dejé corriendo un buen rato y llegó a
 #include <cmath> //para usar la exponencial
 #include <fstream> //para leer archivos
 #include <iomanip> //para usar setprecision
-#define Pi 3.14159265358979323846 //Defino Pi:
+
 #define Na 6.0221367E23 //defino el nro de avogadro
 
 
 using namespace std;
 
 
-//Parámetros de la evolución del sistema
-double tmax, R0, Rmax, T0, Tmax, sigmaT;
+//Parámetros de las reacciones químicas y de la evolución del sistema
+#include "parametros.cpp"
+/*
+Se están incluyendo los parámetros:
+n_species //cantidad de especies que participan en las reacciones químicas
+n_reacc //cantidad de reacciones químicas consideradas
+tmax, R0, Rmax, T0, Tmax, sigmaT;
+*/
 
-
-//Parámetros de las reacciones químicas
-int const n_species = 5; //cantidad de especies que participan en las reacciones químicas
-int const n_reacc = 3;//cantidad de reacciones químicas consideradas
 
 //Defino la matriz Kappa que contendrá la info. de la tabla Kappa_qca
 double Kappa_tabla[n_reacc][9];
@@ -79,23 +81,23 @@ double Kappa_tabla[n_reacc][9];
 //Parámetros del método numérico
 double h = 1.0e-46; //paso de integración
 
-double R(double t){
-    return 1.0e-2*((Rmax-R0)/tmax*t  + R0);
-}
+//Declaro funciones que están definidas en funciones_quimicas.cpp
+double R(double t);
+double V(double t);
+double dVdt(double t);
+double T(double t);
 
-double V(double t){
-    return 4/3 * Pi * pow(R(t),3);}
+//Declaro funciones que están definidas en funciones_math.cpp
+double norma(double y[n_species]);
+void igualar(double y[n_species], double y_[n_species]);
+void difference(double diff[n_species], double a[n_species], double b[n_species]);
+void imprimir_nro_particulas(int n_species, double n[],double t);
+void imprimir_Kappa(int nrow, int ncol, double tabla[][9]);
 
-double dVdt(double t){
-    return 4*Pi*pow(R(t),2)*(Rmax-R0)/tmax;
-}
 
-double T(double t){
-    return Tmax;
-    //return (Tmax-T0)*exp(-0.5*pow(t/sigmaT,2)) + T0;
-}
 
-double Kappa(int j, bool direction, double T_){
+
+double Kappa(int j, bool direction, double T_, double Kappa_tabla[][9]){
     /*Constante de la cinética química de la reacción j a temperatura T.
     direction indica si es forward (0) or backwards (1)
     En la tesis de Gabriela esta constante está enflobada en k*T^c*exp(-E/KT)
@@ -161,39 +163,8 @@ void rk4(double y[], double dydx[], const double x, const double h, double yout[
         yout[i]=y[i]+h6*(dydx[i]+dyt[i]+2.0*dym[i]);
 }
 
-double norma(double y[n_species]){
-    double suma = 0;
-    for(int i=0; i <n_species; ++i ){
-        suma = suma + abs(y[i]); //Calculo el valor absoluto para que las partículas "negativas" cuenten como "positivas" y eso salte en el método.
-    }
-    return abs(suma);
-}
-
-void igualar(double y[n_species], double y_[n_species]){
-    //Iguala el array de la izquierda al de la derecha
-    for(int i=0; i <n_species; ++i ){
-        y[i] = y_[i];
-    }
-
-}
-
-void difference(double diff[n_species], double a[n_species], double b[n_species]){
-    //Calcula la diferencia entre a y b
-    for(int i = 0; i<n_species; ++i){
-        diff[i] = a[i] - b[i];
-    }
-}
 
 
-void imprimir_nro_particulas(int n_species, double n[],double t){
-    cout << setprecision(10) << t << "\t";
-    for(int i = 0; i<n_species; ++i){
-        cout << n[i] << "\t";
-
-    }
-    cout << endl;
-
-};
 
 void rk4_adap_nTot_controller(double *y, double *dydx, const double t0, const double tfinal, const double h0, const double hmin, double *yout, void (*derivs)(const double, double*, double*)){
     
@@ -262,165 +233,6 @@ void rk4_adap_nTot_controller(double *y, double *dydx, const double t0, const do
     }
 }
 
-
-/*
-
-void rk4_adap_nTot_controller(double y[], double dydx[], const double t0, const double tfinal, const double h0, const double hmin, double yout[], void (*derivs)(const double, double*, double*)){
-    
-    //Condiciones iniciales
-    double t = t0;
-
-    //Set initial step size.
-    double dt = h0;
-
-    //Set minimal step size.
-    double dt_min = hmin;
-
-    //Set relative change tolerances.
-    double diffy_max = 1.0e3;  //Diferencia absoluta más grande que soy capaz de aceptar. Si es más grande, achico h
-    double diffy_min = 1.0e2; //Diferencia absoluta más pequeña que soy capaz de aceptar. Si es más chica, agrando h
-    double y_tol = 1.0e-3; //Límite
-
-    //Calculo la cantidad de partículas iniciales
-    double n_tot = norma(y);
-    
-    while (t < tfinal){
-        imprimir_nro_particulas(n_species, y, t);
-        //Calculate partial steps.
-        double step_y[n_species];
-        rk4(y , dydx , t , dt , step_y , derivs);
-        
-        //Calculate partial steps.
-        double half_step_y[n_species];
-        rk4(y , dydx , t , dt/2 , half_step_y , derivs);
-        
-        //Calculate partial steps.
-        double dble_step_y[n_species];
-        rk4(y , dydx , t , 2*dt , dble_step_y , derivs);
-
-        double norma_step_y = norma(step_y);
-        if(norma_step_y < y_tol){ //Use a fixed step size for small values of y.
-            if (dt != dt_min){
-                //cout << "New step size\t" << dt_min << endl;
-                dt = dt_min;}
-            igualar(yout,step_y);}
-        else{
-            //Calcular diferencia entre step_y y half_step_y
-            double half_diff[n_species];
-            for(int i = 0; i<n_species; ++i){
-                half_diff[i] = step_y[i] - half_step_y[i];
-            }
-
-            //Calcular diferencia entre step_y y dble_step_y
-            double dble_diff[n_species];
-            for(int i = 0; i<n_species; ++i){
-                dble_diff[i] = step_y[i] - dble_step_y[i];
-            }
-            if(norma_step_y > y_tol && norma(half_diff) > diffy_max){
-                dt = dt/2; //Error is too large; decrease step size.
-                //cout << "New step size\t" << dt << endl;
-                igualar(yout,yout); //No igualo yout a half_step_y porque quizás
-                continue;              
-                }
-            if (norma_step_y > y_tol && norma(dble_diff) < diffy_min){
-                //cout << "\nTEST: " << dble_diff[0] << dble_diff[1] << dble_diff[2] << dble_diff[3] << dble_diff[4] << endl;
-                dt = dt*2; //Larger error is acceptable; increase step size.}
-                //cout << "New step size\t" << dt <<endl;
-                igualar(yout,dble_step_y);
-                igualar(y,yout);
-                t = t + dt;}
-            else{
-                igualar(yout,step_y);
-                igualar(y,yout);
-                t = t + dt;} //This step size is just right.
-        }
-
-    }
-}
-
-
-
-
-*/
-/*
-
-graph(fast=False)
-fun_graph = gcurve(color=color.red, markers=True)
-
-def fun(t,x):
-    # This is the right-hand side of the first-order ordinary differential 
-    # equation dx/dt = fun.
-#    fun = 3*t**2 
-    fun = exp(x)-x*exp(t) 
-    return fun
-    
-# Set initial conditions.
-t = 0
-x = 0.02
-
-# Set initial step size.
-dt = 1e-1
-
-# Set minimal step size.
-dt_min = 1e-3
-
-# Set relative change tolerances.
-dx_max = 0.01  # Enables faster speed.
-dx_min = 0.008 # Controls accuracy.
-x_tol = 1e-3
-
-while (t < 5):
-    rate(100)
-    
-    # Calculate partial steps.
-    k1 = fun(t,      x)
-    k2 = fun(t+dt/2, x+dt*k1/2)
-    k3 = fun(t+dt/2, x+dt*k2/2)
-    k4 = fun(t+dt,   x+dt*k3)
-    # Combine partial steps.
-    step_x = x + dt/6*(k1+2*k2+2*k3+k4)
-
-    # Calculate partial steps.
-    k2 = fun(t+dt/4, x+dt*k1/4)
-    k3 = fun(t+dt/4, x+dt*k2/4)
-    k4 = fun(t+dt/2, x+dt*k3/2)
-    # Combine partial steps.
-    half_step_x = x + dt/12*(k1+2*k2+2*k3+k4)
-
-    # Calculate partial steps.
-    k2 = fun(t+dt,   x+dt*k1)
-    k3 = fun(t+dt,   x+dt*k2)
-    k4 = fun(t+2*dt, x+2*dt*k3)
-    # Combine partial steps.
-    dble_step_x = x + dt/3*(k1+2*k2+2*k3+k4)
-
-    if (abs(step_x) < x_tol): # Use a fixed step size for small values of x.
-        if (dt != dt_min):
-            print("New step size",dt_min)
-            dt = dt_min
-        new_x = step_x
-    else:
-        if (abs(step_x) > x_tol and abs(step_x-half_step_x)/abs(step_x) > dx_max):
-            dt = dt/2 # Error is too large; decrease step size.
-            print("New step size",dt)
-            new_x = half_step_x
-        else if (abs(step_x) > x_tol and abs(step_x-dble_step_x)/abs(step_x) < dx_min):
-            dt = dt*2 # Larger error is acceptable; increase step size.
-            print("New step size",dt)
-            new_x = dble_step_x
-        else:
-            new_x = step_x # This step size is just right.
-
-    x = new_x
-    t = t + dt
-    
-    
-    fun_graph.plot(pos=(t,x))
-
-
-*/
-
-
 void reacciones(double t, double n[], double dndt[]){
     /*
     n a priori tiene 3 componentes:
@@ -440,9 +252,9 @@ void reacciones(double t, double n[], double dndt[]){
 
     //Términos asocioados a cada reacción. Hacen referencia a la reacción forward
     double terminos_reacc[n_reacc];
-    terminos_reacc[0] = -Kappa(0,0,T(t))*pow(C[0],2) + Kappa(0,1,T(t))*C[1];
-    terminos_reacc[1] = -Kappa(1,0,T(t))*C[0]*C[2] + Kappa(1,1,T(t))*C[3];
-    terminos_reacc[2] = -Kappa(2,0,T(t))*C[0]*C[4] + Kappa(2,1,T(t))*C[2]*C[3];
+    terminos_reacc[0] = -Kappa(0,0,T(t), Kappa_tabla)*pow(C[0],2) + Kappa(0,1,T(t), Kappa_tabla)*C[1];
+    terminos_reacc[1] = -Kappa(1,0,T(t), Kappa_tabla)*C[0]*C[2] + Kappa(1,1,T(t), Kappa_tabla)*C[3];
+    terminos_reacc[2] = -Kappa(2,0,T(t), Kappa_tabla)*C[0]*C[4] + Kappa(2,1,T(t), Kappa_tabla)*C[2]*C[3];
 
     double x[n_species];
 
@@ -465,16 +277,12 @@ void reacciones(double t, double n[], double dndt[]){
 
 }
 
-void imprimir_Kappa(int nrow, int ncol, double tabla[][9]){
-    for(int i = 0; i<nrow; i++){
-        for(int j = 0; j<ncol; j++){
-            cout << tabla[i][j] << "\t";}
-        cout << endl;}
-}
 
 
 int main(){
     
+    
+    /*
     //Importo los parámetros de la evolución del sistema
     ifstream iFile_parametros("parametros.csv");
     if(iFile_parametros) {
@@ -498,6 +306,7 @@ int main(){
         Tmax = parametros[4];
         sigmaT = parametros[5];
     }
+    */
 
 
     //Importo la tabla Kappa_qca que contiene la info. de la tabla 2.2.4.1 de la tesis de Gabriela. Guardo la info. en Kappa_tabla
