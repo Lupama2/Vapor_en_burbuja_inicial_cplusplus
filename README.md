@@ -28,3 +28,7 @@ g++ -o main.exe main.o
 main.exe
 
  -std=c++11
+
+L
+
+Supongo que la no diferencia se debe a que trabajo siempre con arrays nativos que ya se pasan como referencia a las funciones.

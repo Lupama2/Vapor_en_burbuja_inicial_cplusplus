@@ -42,6 +42,16 @@ Falta cambiar:
 *Cambiar de rk4 a rk45 para que el código ejecute más rápido
 *Considerar 3 reacciones
 
+
+
+
+Le toma 1:38 llegar a 1.0e-15. Última línea:
+1.015478346e-015        1.855694689e-028        100000405.8     2.833075811e-027        2.833075811e-027        100000405.8
+Trabajando con punteros como inptut de la función que adelanta un paso (rk4_adap_nTot_controller) le toma 1:38 para llegar a 1.0e-5. última línea
+1.015478346e-015        1.855694689e-028        100000405.8     2.833075811e-027        2.833075811e-027        100000405.8
+
+Lo dejé corriendo un buen rato y llegó a 
+6.180026883e-014        1.855623117e-028        100024697.9     1.835611953e-025        1.835611953e-025        100024697.9
 */
 
 #include <iostream>
@@ -185,7 +195,7 @@ void imprimir_nro_particulas(int n_species, double n[],double t){
 
 };
 
-void rk4_adap_nTot_controller(double y[], double dydx[], const double t0, const double tfinal, const double h0, const double hmin, double yout[], void (*derivs)(const double, double*, double*)){
+void rk4_adap_nTot_controller(double *y, double *dydx, const double t0, const double tfinal, const double h0, const double hmin, double *yout, void (*derivs)(const double, double*, double*)){
     
     //Condiciones iniciales
     double t = t0;
