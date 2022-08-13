@@ -511,47 +511,51 @@ void DiamColVect(double *DiamCol){
 
 void reacciones(double *y,double VolExcl,double ntot,double V,
 					 int Nvar,double *r){
+   /*
+   Esta función calcula la contribución de cada reacción a lo que próximamente serán las derivadas de la concenctración de cada especie. Las primeras reacciones hacen referencia a la tabla 2.2.4.1 de la tesis de Gabriela. En tal caso, r[par] es reacción forward y r[impar], reacción backwards.
 
+
+   */
    extern double Na;
    extern double t1,t2,t5,t6,t15,t16,t33,t34,t39;
 
-
+   //reacción O + O + M -> O2 + M
    r[0]=pow(VolExcl,t1)*1.2e17*(1.0e-12)*(ntot/V)*(y[Nvar+3]/V)*(y[Nvar+3]/V)*
    pow(y[3],-1.0)*exp(-0.0/y[3])/Na/Na;
-
    r[1]=3.16e19*(1.0e-6)*(ntot/V)*(y[Nvar+4]/V)*pow(y[3],-1.3)*exp(-59893.0/y[3])/Na;
 
+   //reacción O + H + M -> OH + M
    r[2]=pow(VolExcl,t2)*5.0e17*(1.0e-12)*(ntot/V)*(y[Nvar+3]/V)*(y[Nvar+2]/V)*
    pow(y[3],-1.0)*exp(-0.0/y[3])/Na/Na;
-
    r[3]=3.54e17*(1.0e-6)*(ntot/V)*(y[Nvar+5]/V)*pow(y[3],-0.9)*exp(-51217.0/y[3])/Na;
 
+   //reacción O + H2 -> H + OH
    r[4]=3.87e4*(1.0e-6)*(y[Nvar+3]/V)*(y[Nvar+1]/V)*pow(y[3],2.7)*exp(-3150.0/y[3])/Na;
-
    r[5]=1.79e4*(1.0e-6)*(y[Nvar+2]/V)*(y[Nvar+5]/V)*pow(y[3],2.7)*exp(-2200.0/y[3])/Na;
 
+   //reacción H + O2 -> O + OH
    r[6]=2.65e16*(1.0e-6)*(y[Nvar+2]/V)*(y[Nvar+4]/V)*pow(y[3],-0.7)*exp(-8576.0/y[3])/Na;
-
    r[7]=9.0e13*(1.0e-6)*(y[Nvar+3]/V)*(y[Nvar+5]/V)*pow(y[3],-0.3)*exp(83.0/y[3])/Na;
 
+   //reacción H + H + M -> H2 + M
    r[8]=pow(VolExcl,t5)*1.0e18*(1.0e-12)*(ntot/V)*(y[Nvar+2]/V)*(y[Nvar+2]/V)*
    pow(y[3],-1.0)*exp(-0.0/y[3])/Na/Na;
-
    r[9]=7.46e17*(1.0e-6)*(ntot/V)*(y[Nvar+1]/V)*pow(y[3],-0.8)*exp(-52177.0/y[3])/Na;
 
+   //reacción H + OH + M -> H20 + M
    r[10]=pow(VolExcl,t6)*2.2e22*(1.0e-12)*(ntot/V)*(y[Nvar+2]/V)*(y[Nvar+5]/V)*
    pow(y[3],-2.0)*exp(-0.0/y[3])/Na/Na;
-
    r[11]=3.67e23*(1.0e-6)*(ntot/V)*(y[Nvar+6]/V)*pow(y[3],-2.0)*exp(-59980.0/y[3])/Na;
 
+   //reacción OH + H2 -> H + H20
    r[12]=2.16e8*(1.0e-6)*(y[Nvar+5]/V)*(y[Nvar+1]/V)*pow(y[3],1.5)*exp(-1726.0/y[3])/Na;
-
    r[13]=5.2e9*(1.0e-6)*(y[Nvar+2]/V)*(y[Nvar+6]/V)*pow(y[3],1.3)*exp(-9529.0/y[3])/Na;
 
+   //reacción OH + OH -> O + H20
    r[14]=3.57e4*(1.0e-6)*(y[Nvar+5]/V)*(y[Nvar+5]/V)*pow(y[3],2.4)*exp(-1062.0/y[3])/Na;
-
    r[15]=1.74e6*(1.0e-6)*(y[Nvar+3]/V)*(y[Nvar+6]/V)*pow(y[3],2.2)*exp(-7693.0/y[3])/Na;
 
+   //REACCIONES QUE INVOLUCRAN NITRÓGENO Y/O REACCIONES QUE NO CONOZCO:
    r[16]=2.7e13*(1.0e-6)*(y[Nvar+7]/V)*(y[Nvar+12]/V)*pow(y[3],0.0)*exp(-179.0/y[3])/Na;
 
    r[17]=5.32e13*(1.0e-6)*(y[Nvar+16]/V)*(y[Nvar+3]/V)*pow(y[3],0.1)*exp(-37989.0/y[3])/Na;

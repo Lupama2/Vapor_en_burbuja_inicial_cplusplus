@@ -327,6 +327,7 @@ void derivada(double t,double *y,double TB, double mp,double k,
       rb7=r[13];
       rf8=r[14];
       rb8=r[15];
+      //REACCIONES QUE INVOLUCRAN NITRÓGENO Y/O REACCIONES QUE NO CONOZCO:
       rf9=r[16];
       rb9=r[17];
       rf10=r[18];
@@ -418,6 +419,41 @@ void derivada(double t,double *y,double TB, double mp,double k,
       //*******************derivadas de las especies****************************
       //************************difusion + disociacion**************************
 
+      //Versión simplificada que contiene sólo las reacciones que no involucran Nitrógeno.
+      //HAY UNA INCONSISTENCIA: ESTAMOS CONSIDERANDO H02 Y H202 PERO NO SÉ QUÉ EFECTO TIENEN EN LAS DEMÁS ESPECIES, QUIZÁS HALLA QUE SUMAR OTROS TÉRMINOS.
+      //H2
+      dydt[Nvar2+1]=dydt[Nvar2+1]+V*(-1.0*(rf3-rb3)+1.0*(rf5-rb5)-1.0*(rf7-rb7));
+
+      //H
+      dydt[Nvar2+2]=dydt[Nvar2+2]+V*(-1.0*(rf2-rb2)+1.0*(rf3-rb3)-1.0*(rf4-rb4)-2.0*(rf5-rb5)-
+      1.0*(rf6-rb6)+1.0*(rf7-rb7));
+
+      //O
+      dydt[Nvar2+3]=dydt[Nvar2+3]+V*(-2.0*(rf1-rb1)-1.0*(rf2-rb2)-1.0*(rf3-rb3)+1.0*(rf4-rb4)
+      +1.0*(rf8-rb8));
+
+      //O2
+      dydt[Nvar2+4]=dydt[Nvar2+4]+V*(1.0*(rf1-rb1)-1.0*(rf4-rb4));
+
+      //OH
+      dydt[Nvar2+5]=dydt[Nvar2+5]+V*(+1.0*(rf2-rb2)+1.0*(rf3-rb3)+1.0*(rf4-rb4)-1.0*(rf6-rb6)
+      -1.0*(rf7-rb7)-2.0*(rf8-rb8));
+
+      //H20
+      dydt[Nvar2+6]=dydt[Nvar2+6]+V*(+1.0*(rf6-rb6)+1.0*(rf7-rb7)+1.0*(rf8-rb8));
+
+
+      dydt[Nvar2+17]=dydt[Nvar2+17];
+
+      //H2O2
+      dydt[Nvar2+18]=dydt[Nvar2+18]+V*(-1.0*(rf47-rb47)-1.0*(rf48-rb48)-1.0*(rf49-rb49)-1.0*(rf50-rb50)-
+      1.0*(rf51-rb51)+1.0*(rf46-rb46));
+
+      //HO2
+      dydt[Nvar2+19]=dydt[Nvar2+19]+V*(-2.0*(rf46-rb46)+1.0*(rf49-rb49)+1.0*(rf50-rb50)+1.0*(rf51-rb51));
+
+      /* COPIA VIEJA:
+      
 
       dydt[Nvar2+1]=dydt[Nvar2+1]+V*(-1.0*(rf3-rb3)+1.0*(rf5-rb5)-1.0*(rf7-rb7)+1.0*(rf20-rb20)+
       1.0*(rf26-rb26)+1.0*(rf31-rb31)+1.0*(rf37-rb37)+1.0*(rf41-rb41)+1.0*
@@ -481,7 +517,7 @@ void derivada(double t,double *y,double TB, double mp,double k,
       dydt[Nvar2+16]=dydt[Nvar2+16]+V*(+1.0*(rf9-rb9)+1.0*(rf12-rb12)+1.0*(rf14-rb14)+1.0*(rf15-rb15)+
       1.0*(rf25-rb25)+1.0*(rf27-rb27)+1.0*(rf33-rb33)+1.0*(rf34-rb34)+1.0*
       (rf35-rb35)+1.0*(rf37-rb37)+1.0*(rf38-rb38));
-      */
+      
 
 
       dydt[Nvar2+17]=dydt[Nvar2+17];
@@ -490,6 +526,7 @@ void derivada(double t,double *y,double TB, double mp,double k,
       1.0*(rf51-rb51)+1.0*(rf46-rb46));
 
       dydt[Nvar2+19]=dydt[Nvar2+19]+V*(-2.0*(rf46-rb46)+1.0*(rf49-rb49)+1.0*(rf50-rb50)+1.0*(rf51-rb51));
+      */
 
    }
 

@@ -11,18 +11,11 @@ En base a la tabla 2.2.4.1 de la tesis de Gabriela, consideraremos que no hay N 
 
 Las variables que nos interesan calcular son el nro de partículas de las distintas especies en el tiempo. 
 
+Para resolver el problema me baso en los códigos de Gabriela QUE ESTÁN MUY POCO COMENTADOS, así que voy comentando según lo que entiendo.
 
+Para ejecutar el código
 
-Mantener los parámetros Temporal integration control
-y0 es la cantidda inicial de partículas. Va a ser dato cuántas moléculas de cada cosa hay. También va a ser dato la T_inicial. T(t) hay que calcularlo tmb.
- 4.096e-043
+g++ -S ecdiff_Pablo.cpp FUNCIONS_Pablo.cpp PSULSOAR_Pablo.cpp Rkqc_Pablo.cpp Rkutta4_Pablo.cpp sbsl_Pablo.cpp
+g++ -c ecdiff_Pablo.cpp FUNCIONS_Pablo.cpp PSULSOAR_Pablo.cpp Rkqc_Pablo.cpp Rkutta4_Pablo.cpp sbsl_Pablo.cpp 
+g++ -o test.exe ecdiff_Pablo.o FUNCIONS_Pablo.o PSULSOAR_Pablo.o Rkqc_Pablo.o Rkutta4_Pablo.o sbsl_Pablo.o 
 
-
-
-
-g++ -S main.cpp
-g++ -c main.cpp
-g++ -o main.exe main.o
-main.exe
-
- -std=c++11

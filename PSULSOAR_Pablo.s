@@ -919,7 +919,8 @@ _Z10parametrosv:
 	movsd	.LC24(%rip), %xmm0
 	movsd	%xmm0, betab6(%rip)
 	movl	$1, yndisoc(%rip)
-	movl	$6, NumEsp(%rip)
+	movl	$0, yndif(%rip)
+	movl	$8, NumEsp(%rip)
 	movl	NumEsp(%rip), %eax
 	movl	%eax, Nvar(%rip)
 	movsd	.LC25(%rip), %xmm0

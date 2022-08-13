@@ -1,6 +1,14 @@
+/*
+Se definen los parámetros físicos del problema y los asociados a la simulación computacional.
+
+Dado que se consideran todos los fenómenos físicos que inicialmente consideró Gabriela, se eliminó la definición de muchas variables.
+
+*/
+
+
 #include <math.h>
 
-#define NOMINMAX
+#define NOMINMAX //Encontré en un foro que resulta ser una macro importante cuando se trabaja con el header windows.h
 #include <windows.h>
 
 double eps,stop,step,hmin,t0;
