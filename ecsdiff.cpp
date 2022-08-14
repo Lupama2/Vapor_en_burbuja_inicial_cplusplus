@@ -70,6 +70,7 @@ void reacciones(double t, double n[], double dndt[]){
     r[0]=pow(VolExcl,t1)*1.2e17*(1.0e-12)*(ntot/V(t))*(n[0]/V(t))*(n[1]/V(t))*pow(T(t),-1.0)*exp(-0.0/T(t))/Na/Na;
     r[1]=3.16e19*(1.0e-6)*(ntot/V(t))*(n[1]/V(t))*pow(T(t),-1.3)*exp(-59893.0/T(t))/Na;
 
+    
 
     //Cálculo de dndt
     dndt[0]=V(t)*(-2.0*(r[0]-r[1]));// + n[0]*dVdt(t)/V(t);
