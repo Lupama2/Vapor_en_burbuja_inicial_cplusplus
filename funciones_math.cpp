@@ -14,17 +14,38 @@ using namespace std;
 
 //#include "parametros.h" //importo los parámetros y sus valores.
 
+double masa(int n_species, double n[]){
+    double m = 0.0;
+    for(int i = 0; i < n_species; i++){
+        m = m + n[i]*masa_species[i];
+    }
+    return m;
+}
+
+
 void imprimir_nro_particulas(int n_species, double n[],double t){
+    //cout << "t\tH2\tO\tO2\tOH\tH2O\tH2O2\tH02\tmasa" << endl;
     cout << setprecision(10) << t << "\t";
-    double n_tot = 0.0;
-    n_tot = n[0]/2 + n[1];
     for(int i = 0; i<n_species; ++i){
         cout << n[i] << "\t";
-        //n_tot = n_tot + n[i];
     }
-    cout << n_tot << "\t" << n[0]/1.0e8<< endl;
-
+    //double m_conservativa = masa(n_species,n);
+    cout << endl;
+    //cout << masa(n_species, n) << endl;
 };
+
+
+//Descontinuado pero útil para el caso de una única reacción:
+// void imprimir_nro_particulas(int n_species, double n[],double t){
+//     cout << setprecision(10) << t << "\t";
+//     double alpha = 0.0;
+//     alpha = n[2]/2 + n[3];
+//     for(int i = 0; i<n_species; ++i){
+//         cout << n[i] << "\t";
+//     }
+//     cout << alpha << "\t" << n[2]/1.0e8<< endl;
+
+// };
 
 
 //FUNCIONES QUE NO SE USAN:

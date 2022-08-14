@@ -1,15 +1,11 @@
 # Vapor_en_burbuja_inicial_cplusplus
 Vapor en la burbuja inicial. Código en C++
 
-Caso particular para una única reacción:
-O + O + M -> 02 + O2
-empleando el método numérico propuesto por Gabriela.
 
-A priori, se debería conservar
-alpha = n_O2 + n_0/2
-(El nro de partículas no se conserva porque una partícula 02 es distinto a 2 partículas O2)
+A priori, se debería conservar la masa (El nro de partículas no se conserva)
 
 Copio las reacciones tal cual el código de Gabriela
+Creo que el problema del caso de una única reacción es que había copiado mal el término de la reacción.
 
 
 Copié los datos sólo correspondientes a la 1er reacción en el código de Gabriela y alpha se conserva. El cambio debido a las reacciones ella lo escribió como

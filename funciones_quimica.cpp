@@ -23,3 +23,4 @@ double dVdt(double t){
 double T(double t){
     return (Tmax-T0)*exp(-0.5*pow(t/sigmaT,2)) + T0;
 }
+

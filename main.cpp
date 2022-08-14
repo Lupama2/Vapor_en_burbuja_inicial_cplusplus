@@ -134,7 +134,7 @@ int main(){
             n[i]=nout[i];
         }
         //Los imprimo:
-        if(contador%100000== 0){imprimir_nro_particulas(n_species, n, t);}
+        if(contador%10000== 0){imprimir_nro_particulas(n_species, n, t);}
 
         //Asumo que lo siguiente no es importante y lo comento. Creo que hace referencia a las variables R, V, T, dVdt,...
         // for(int i=1;i<6;i++)
