@@ -96,9 +96,6 @@ sigmaT:
 	.align 4
 _ZL9n_species:
 	.long	8
-	.align 4
-_ZL7n_reacc:
-	.long	3
 	.globl	n
 	.data
 	.align 32
@@ -114,7 +111,7 @@ n:
 	.long	0
 	.long	0
 	.long	0
-	.long	0
+	.long	1100470148
 	.long	0
 	.long	0
 	.long	0
@@ -804,8 +801,8 @@ _Z10reaccionesdPdS_:
 	movsd	(%rax), %xmm6
 	movsd	512(%rbp), %xmm0
 	call	_Z1Vd
+	divsd	%xmm0, %xmm6
 	movapd	%xmm6, %xmm1
-	divsd	%xmm0, %xmm1
 	movsd	.LC24(%rip), %xmm0
 	movapd	%xmm1, %xmm7
 	mulsd	%xmm0, %xmm7
@@ -841,8 +838,8 @@ _Z10reaccionesdPdS_:
 	movsd	(%rax), %xmm6
 	movsd	512(%rbp), %xmm0
 	call	_Z1Vd
+	divsd	%xmm0, %xmm6
 	movapd	%xmm6, %xmm1
-	divsd	%xmm0, %xmm1
 	movsd	.LC27(%rip), %xmm0
 	movapd	%xmm1, %xmm7
 	mulsd	%xmm0, %xmm7
@@ -882,8 +879,8 @@ _Z10reaccionesdPdS_:
 	movsd	.LC30(%rip), %xmm0
 	mulsd	%xmm0, %xmm1
 	movsd	.LC9(%rip), %xmm0
-	mulsd	%xmm0, %xmm1
 	movapd	%xmm1, %xmm6
+	mulsd	%xmm0, %xmm6
 	movsd	512(%rbp), %xmm0
 	call	_Z1Vd
 	movapd	%xmm0, %xmm1
@@ -970,8 +967,8 @@ _Z10reaccionesdPdS_:
 	movsd	.LC34(%rip), %xmm0
 	mulsd	%xmm0, %xmm1
 	movsd	.LC9(%rip), %xmm0
-	mulsd	%xmm0, %xmm1
 	movapd	%xmm1, %xmm6
+	mulsd	%xmm0, %xmm6
 	movsd	512(%rbp), %xmm0
 	call	_Z1Vd
 	movapd	%xmm0, %xmm1
@@ -1057,8 +1054,8 @@ _Z10reaccionesdPdS_:
 	movsd	(%rax), %xmm6
 	movsd	512(%rbp), %xmm0
 	call	_Z1Vd
+	divsd	%xmm0, %xmm6
 	movapd	%xmm6, %xmm1
-	divsd	%xmm0, %xmm1
 	movsd	.LC38(%rip), %xmm0
 	movapd	%xmm1, %xmm7
 	mulsd	%xmm0, %xmm7
@@ -1093,8 +1090,8 @@ _Z10reaccionesdPdS_:
 	movsd	(%rax), %xmm6
 	movsd	512(%rbp), %xmm0
 	call	_Z1Vd
+	divsd	%xmm0, %xmm6
 	movapd	%xmm6, %xmm1
-	divsd	%xmm0, %xmm1
 	movsd	.LC41(%rip), %xmm0
 	movapd	%xmm1, %xmm7
 	mulsd	%xmm0, %xmm7
@@ -1130,8 +1127,8 @@ _Z10reaccionesdPdS_:
 	movsd	(%rax), %xmm6
 	movsd	512(%rbp), %xmm0
 	call	_Z1Vd
+	divsd	%xmm0, %xmm6
 	movapd	%xmm6, %xmm1
-	divsd	%xmm0, %xmm1
 	movsd	.LC44(%rip), %xmm0
 	movapd	%xmm1, %xmm7
 	mulsd	%xmm0, %xmm7
@@ -1167,8 +1164,8 @@ _Z10reaccionesdPdS_:
 	movsd	(%rax), %xmm6
 	movsd	512(%rbp), %xmm0
 	call	_Z1Vd
+	divsd	%xmm0, %xmm6
 	movapd	%xmm6, %xmm1
-	divsd	%xmm0, %xmm1
 	movsd	.LC47(%rip), %xmm0
 	movapd	%xmm1, %xmm7
 	mulsd	%xmm0, %xmm7
@@ -1204,8 +1201,8 @@ _Z10reaccionesdPdS_:
 	movsd	(%rax), %xmm6
 	movsd	512(%rbp), %xmm0
 	call	_Z1Vd
+	divsd	%xmm0, %xmm6
 	movapd	%xmm6, %xmm1
-	divsd	%xmm0, %xmm1
 	movsd	.LC50(%rip), %xmm0
 	movapd	%xmm1, %xmm7
 	mulsd	%xmm0, %xmm7
@@ -1237,8 +1234,8 @@ _Z10reaccionesdPdS_:
 	movsd	(%rax), %xmm6
 	movsd	512(%rbp), %xmm0
 	call	_Z1Vd
+	divsd	%xmm0, %xmm6
 	movapd	%xmm6, %xmm1
-	divsd	%xmm0, %xmm1
 	movsd	.LC52(%rip), %xmm0
 	movapd	%xmm1, %xmm7
 	mulsd	%xmm0, %xmm7
@@ -1274,11 +1271,11 @@ _Z10reaccionesdPdS_:
 	movsd	(%rax), %xmm6
 	movsd	512(%rbp), %xmm0
 	call	_Z1Vd
+	divsd	%xmm0, %xmm6
 	movapd	%xmm6, %xmm1
-	divsd	%xmm0, %xmm1
 	movsd	.LC55(%rip), %xmm0
-	mulsd	%xmm0, %xmm1
 	movapd	%xmm1, %xmm6
+	mulsd	%xmm0, %xmm6
 	movsd	512(%rbp), %xmm0
 	call	_Z1Vd
 	movapd	%xmm0, %xmm1
@@ -1350,8 +1347,8 @@ _Z10reaccionesdPdS_:
 	movsd	(%rax), %xmm6
 	movsd	512(%rbp), %xmm0
 	call	_Z1Vd
+	divsd	%xmm0, %xmm6
 	movapd	%xmm6, %xmm1
-	divsd	%xmm0, %xmm1
 	movsd	.LC60(%rip), %xmm0
 	movapd	%xmm1, %xmm7
 	mulsd	%xmm0, %xmm7
@@ -1683,10 +1680,18 @@ _Z10reaccionesdPdS_:
 	movsd	512(%rbp), %xmm0
 	call	_Z1Vd
 	movapd	%xmm0, %xmm2
-	movsd	320(%rbp), %xmm0
-	subsd	312(%rbp), %xmm0
-	movq	.LC80(%rip), %xmm1
-	xorpd	%xmm1, %xmm0
+	movsd	288(%rbp), %xmm0
+	subsd	280(%rbp), %xmm0
+	movsd	320(%rbp), %xmm1
+	subsd	312(%rbp), %xmm1
+	subsd	%xmm1, %xmm0
+	movsd	256(%rbp), %xmm1
+	subsd	248(%rbp), %xmm1
+	subsd	%xmm1, %xmm0
+	movapd	%xmm0, %xmm1
+	movsd	176(%rbp), %xmm0
+	subsd	168(%rbp), %xmm0
+	addsd	%xmm1, %xmm0
 	mulsd	%xmm2, %xmm0
 	movq	528(%rbp), %rax
 	movsd	%xmm0, (%rax)
@@ -1697,6 +1702,28 @@ _Z10reaccionesdPdS_:
 	subsd	312(%rbp), %xmm0
 	movsd	336(%rbp), %xmm1
 	subsd	328(%rbp), %xmm1
+	subsd	%xmm1, %xmm0
+	movsd	304(%rbp), %xmm1
+	subsd	296(%rbp), %xmm1
+	subsd	%xmm1, %xmm0
+	movapd	%xmm0, %xmm1
+	movsd	288(%rbp), %xmm0
+	subsd	280(%rbp), %xmm0
+	addsd	%xmm0, %xmm0
+	subsd	%xmm0, %xmm1
+	movapd	%xmm1, %xmm0
+	movsd	272(%rbp), %xmm1
+	subsd	264(%rbp), %xmm1
+	subsd	%xmm1, %xmm0
+	movapd	%xmm0, %xmm1
+	movsd	256(%rbp), %xmm0
+	subsd	248(%rbp), %xmm0
+	addsd	%xmm1, %xmm0
+	movsd	192(%rbp), %xmm1
+	subsd	184(%rbp), %xmm1
+	subsd	%xmm1, %xmm0
+	movsd	176(%rbp), %xmm1
+	subsd	168(%rbp), %xmm1
 	subsd	%xmm1, %xmm0
 	movq	528(%rbp), %rax
 	addq	$8, %rax
@@ -1716,18 +1743,35 @@ _Z10reaccionesdPdS_:
 	movsd	320(%rbp), %xmm1
 	subsd	312(%rbp), %xmm1
 	subsd	%xmm1, %xmm0
+	movapd	%xmm0, %xmm1
+	movsd	304(%rbp), %xmm0
+	subsd	296(%rbp), %xmm0
+	addsd	%xmm0, %xmm1
+	movsd	240(%rbp), %xmm0
+	subsd	232(%rbp), %xmm0
+	addsd	%xmm1, %xmm0
+	movsd	160(%rbp), %xmm1
+	subsd	152(%rbp), %xmm1
+	subsd	%xmm1, %xmm0
 	movq	528(%rbp), %rax
 	addq	$16, %rax
 	mulsd	%xmm2, %xmm0
 	movsd	%xmm0, (%rax)
 	movsd	512(%rbp), %xmm0
 	call	_Z1Vd
-	movapd	%xmm0, %xmm1
+	movapd	%xmm0, %xmm2
 	movsd	352(%rbp), %xmm0
 	subsd	344(%rbp), %xmm0
+	movsd	304(%rbp), %xmm1
+	subsd	296(%rbp), %xmm1
+	subsd	%xmm1, %xmm0
+	movapd	%xmm0, %xmm1
+	movsd	224(%rbp), %xmm0
+	subsd	216(%rbp), %xmm0
+	addsd	%xmm1, %xmm0
 	movq	528(%rbp), %rax
 	addq	$24, %rax
-	mulsd	%xmm1, %xmm0
+	mulsd	%xmm2, %xmm0
 	movsd	%xmm0, (%rax)
 	movsd	512(%rbp), %xmm0
 	call	_Z1Vd
@@ -1737,22 +1781,104 @@ _Z10reaccionesdPdS_:
 	subsd	328(%rbp), %xmm1
 	movsd	320(%rbp), %xmm0
 	subsd	312(%rbp), %xmm0
+	addsd	%xmm0, %xmm1
+	movsd	304(%rbp), %xmm0
+	subsd	296(%rbp), %xmm0
+	addsd	%xmm1, %xmm0
+	movsd	272(%rbp), %xmm1
+	subsd	264(%rbp), %xmm1
+	subsd	%xmm1, %xmm0
+	movsd	256(%rbp), %xmm1
+	subsd	248(%rbp), %xmm1
+	subsd	%xmm1, %xmm0
+	movapd	%xmm0, %xmm1
+	movsd	240(%rbp), %xmm0
+	subsd	232(%rbp), %xmm0
+	addsd	%xmm0, %xmm0
+	subsd	%xmm0, %xmm1
+	movsd	208(%rbp), %xmm0
+	subsd	200(%rbp), %xmm0
+	addsd	%xmm0, %xmm0
+	addsd	%xmm0, %xmm1
+	movsd	192(%rbp), %xmm0
+	subsd	184(%rbp), %xmm0
+	addsd	%xmm0, %xmm1
+	movsd	160(%rbp), %xmm0
+	subsd	152(%rbp), %xmm0
 	addsd	%xmm1, %xmm0
 	movq	528(%rbp), %rax
 	addq	$32, %rax
 	mulsd	%xmm2, %xmm0
 	movsd	%xmm0, (%rax)
+	movsd	512(%rbp), %xmm0
+	call	_Z1Vd
+	movapd	%xmm0, %xmm2
+	movsd	272(%rbp), %xmm0
+	movapd	%xmm0, %xmm1
+	subsd	264(%rbp), %xmm1
+	movsd	256(%rbp), %xmm0
+	subsd	248(%rbp), %xmm0
+	addsd	%xmm0, %xmm1
+	movsd	240(%rbp), %xmm0
+	subsd	232(%rbp), %xmm0
+	addsd	%xmm0, %xmm1
+	movsd	192(%rbp), %xmm0
+	subsd	184(%rbp), %xmm0
+	addsd	%xmm0, %xmm1
+	movsd	144(%rbp), %xmm0
+	subsd	136(%rbp), %xmm0
+	addsd	%xmm1, %xmm0
 	movq	528(%rbp), %rax
 	addq	$40, %rax
-	pxor	%xmm0, %xmm0
+	mulsd	%xmm2, %xmm0
 	movsd	%xmm0, (%rax)
+	movsd	512(%rbp), %xmm0
+	call	_Z1Vd
+	movapd	%xmm0, %xmm2
+	movsd	208(%rbp), %xmm0
+	subsd	200(%rbp), %xmm0
+	movq	.LC80(%rip), %xmm1
+	xorpd	%xmm1, %xmm0
+	movsd	192(%rbp), %xmm1
+	subsd	184(%rbp), %xmm1
+	subsd	%xmm1, %xmm0
+	movsd	176(%rbp), %xmm1
+	subsd	168(%rbp), %xmm1
+	subsd	%xmm1, %xmm0
+	movsd	160(%rbp), %xmm1
+	subsd	152(%rbp), %xmm1
+	subsd	%xmm1, %xmm0
+	movsd	144(%rbp), %xmm1
+	subsd	136(%rbp), %xmm1
+	subsd	%xmm1, %xmm0
+	movapd	%xmm0, %xmm1
+	movsd	224(%rbp), %xmm0
+	subsd	216(%rbp), %xmm0
+	addsd	%xmm1, %xmm0
 	movq	528(%rbp), %rax
 	addq	$48, %rax
-	pxor	%xmm0, %xmm0
+	mulsd	%xmm2, %xmm0
 	movsd	%xmm0, (%rax)
+	movsd	512(%rbp), %xmm0
+	call	_Z1Vd
+	movapd	%xmm0, %xmm2
+	movsd	224(%rbp), %xmm0
+	movapd	%xmm0, %xmm1
+	subsd	216(%rbp), %xmm1
+	movsd	.LC35(%rip), %xmm0
+	mulsd	%xmm0, %xmm1
+	movsd	176(%rbp), %xmm0
+	subsd	168(%rbp), %xmm0
+	addsd	%xmm0, %xmm1
+	movsd	160(%rbp), %xmm0
+	subsd	152(%rbp), %xmm0
+	addsd	%xmm0, %xmm1
+	movsd	144(%rbp), %xmm0
+	subsd	136(%rbp), %xmm0
+	addsd	%xmm1, %xmm0
 	movq	528(%rbp), %rax
 	addq	$56, %rax
-	pxor	%xmm0, %xmm0
+	mulsd	%xmm2, %xmm0
 	movsd	%xmm0, (%rax)
 	nop
 	movaps	464(%rbp), %xmm6
@@ -3035,8 +3161,8 @@ _GLOBAL__sub_I_tmax:
 	.long	1034288511
 	.align 8
 .LC92:
-	.long	-1747416644
-	.long	1016910514
+	.long	1749644930
+	.long	1027352002
 	.align 8
 .LC93:
 	.long	0

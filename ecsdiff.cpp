@@ -168,14 +168,11 @@ void reacciones(double t, double n[], double dndt[]){
     // dndt[3]=V(t)*(1.0*(rf1-rb1));// + n[1]*dVdt(t)/V(t);
 
     //3 reacciones:
-    dndt[0]=V(t)*(-1.0*(rf3-rb3));
-    dndt[1]=V(t)*(-1.0*(rf2-rb2)+1.0*(rf3-rb3));
-    dndt[2]=V(t)*(-2.0*(rf1-rb1)-1.0*(rf2-rb2)-1.0*(rf3-rb3));
-    dndt[3]=V(t)*(1.0*(rf1-rb1));
-    dndt[4]=V(t)*(+1.0*(rf2-rb2)+1.0*(rf3-rb3));
-    dndt[5]=0;
-    dndt[6]=0;
-    dndt[7]=0;
+    // dndt[0]=V(t)*(-1.0*(rf3-rb3));
+    // dndt[1]=V(t)*(-1.0*(rf2-rb2)+1.0*(rf3-rb3));
+    // dndt[2]=V(t)*(-2.0*(rf1-rb1)-1.0*(rf2-rb2)-1.0*(rf3-rb3));
+    // dndt[3]=V(t)*(1.0*(rf1-rb1));
+    // dndt[4]=V(t)*(+1.0*(rf2-rb2)+1.0*(rf3-rb3));
 
     //Todas las reacciones que no involucran N (Nitrógeno):
     //n[0] = y[Nvar2+1] =H2.
@@ -187,14 +184,14 @@ void reacciones(double t, double n[], double dndt[]){
     //n[6] = y[Nvar2+18] =H2O2. Este es mi n[6]
     //n[7] = y[Nvar2+19] =HO2
 
-    // dndt[0]=V(t)*(-1.0*(rf3-rb3)+1.0*(rf5-rb5)-1.0*(rf7-rb7)+1.0*(rf49-rb49));
-    // dndt[1]=V(t)*(-1.0*(rf2-rb2)+1.0*(rf3-rb3)-1.0*(rf4-rb4)-2.0*(rf5-rb5)-1.0*(rf6-rb6)+1.0*(rf7-rb7)-1.0*(rf48-rb48)-1.0*(rf49-rb49));
-    // dndt[2]=V(t)*(-2.0*(rf1-rb1)-1.0*(rf2-rb2)-1.0*(rf3-rb3)+1.0*(rf4-rb4)+1.0*(rf8-rb8)-1.0*(rf50-rb50));
-    // dndt[3]=V(t)*(1.0*(rf1-rb1)-1.0*(rf4-rb4)+1.0*(rf46-rb46));
-    // dndt[4]=V(t)*(+1.0*(rf2-rb2)+1.0*(rf3-rb3)+1.0*(rf4-rb4)-1.0*(rf6-rb6)-1.0*(rf7-rb7)-2.0*(rf8-rb8)+2.0*(rf47-rb47)+1.0*(rf48-rb48)+1.0*(rf50-rb50));
-    // dndt[5]=V(t)*(+1.0*(rf6-rb6)+1.0*(rf7-rb7)+1.0*(rf8-rb8)+ 1.0*(rf48-rb48)+1.0*(rf51-rb51));
-    // dndt[6]=V(t)*(-1.0*(rf47-rb47)-1.0*(rf48-rb48)-1.0*(rf49-rb49)-1.0*(rf50-rb50)-1.0*(rf51-rb51)+1.0*(rf46-rb46));
-    // dndt[7]=V(t)*(-2.0*(rf46-rb46)+1.0*(rf49-rb49)+1.0*(rf50-rb50)+1.0*(rf51-rb51));
+    dndt[0]=V(t)*(-1.0*(rf3-rb3)+1.0*(rf5-rb5)-1.0*(rf7-rb7)+1.0*(rf49-rb49));
+    dndt[1]=V(t)*(-1.0*(rf2-rb2)+1.0*(rf3-rb3)-1.0*(rf4-rb4)-2.0*(rf5-rb5)-1.0*(rf6-rb6)+1.0*(rf7-rb7)-1.0*(rf48-rb48)-1.0*(rf49-rb49));
+    dndt[2]=V(t)*(-2.0*(rf1-rb1)-1.0*(rf2-rb2)-1.0*(rf3-rb3)+1.0*(rf4-rb4)+1.0*(rf8-rb8)-1.0*(rf50-rb50));
+    dndt[3]=V(t)*(1.0*(rf1-rb1)-1.0*(rf4-rb4)+1.0*(rf46-rb46));
+    dndt[4]=V(t)*(+1.0*(rf2-rb2)+1.0*(rf3-rb3)+1.0*(rf4-rb4)-1.0*(rf6-rb6)-1.0*(rf7-rb7)-2.0*(rf8-rb8)+2.0*(rf47-rb47)+1.0*(rf48-rb48)+1.0*(rf50-rb50));
+    dndt[5]=V(t)*(+1.0*(rf6-rb6)+1.0*(rf7-rb7)+1.0*(rf8-rb8)+ 1.0*(rf48-rb48)+1.0*(rf51-rb51));
+    dndt[6]=V(t)*(-1.0*(rf47-rb47)-1.0*(rf48-rb48)-1.0*(rf49-rb49)-1.0*(rf50-rb50)-1.0*(rf51-rb51)+1.0*(rf46-rb46));
+    dndt[7]=V(t)*(-2.0*(rf46-rb46)+1.0*(rf49-rb49)+1.0*(rf50-rb50)+1.0*(rf51-rb51));
 
 
     //Código de Pablo (no conserva ALPHA n/V dV/dt)

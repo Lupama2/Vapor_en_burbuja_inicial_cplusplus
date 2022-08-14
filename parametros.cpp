@@ -8,13 +8,13 @@ double sigmaT = 1e-6;
 
 //Parámetros químicos:
 int const n_species = 8;
-int const n_reacc = 3;
+//int const n_reacc = 14;
 
 //Condiciones iniciales
 //Orden:
 //n[n_species] = {n[0],     n[1],   n[2],   n[3],   n[4],   n[5],   n[6],   n[7]};
-//n[n_species] = {H2,       H,      O,      O2,     OH,     H2O,    H2O2,   HO2};
-double n[n_species] = {1.0e8,0.0,0.0,1.0e8,0,0,0,0};
+//n[n_species] =      {H2,       H,      O,      O2,     OH,     H2O,    H2O2,   HO2};
+double n[n_species] = {1.0e8,   0.0,    0.0,    1.0e8,  0.0,    1.0e8,    0.0,    0.0};
 //Masas:
 //masa de H: 1,00784 u (unidad de masa atómica)
 //masa de O: 15,999 u
