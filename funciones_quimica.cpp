@@ -10,7 +10,7 @@ Funciones necesarias para la evolución química del sistema.
 #define Pi 3.14159265358979323846 //Defino Pi:
 
 double R(double t){
-    return 1.0e-2*((Rmax-R0)/tmax*t  + R0);
+    return ((Rmax-R0)/tmax*t  + R0);
 }
 
 double V(double t){
@@ -21,6 +21,5 @@ double dVdt(double t){
 }
 
 double T(double t){
-    return Tmax;
-    //return (Tmax-T0)*exp(-0.5*pow(t/sigmaT,2)) + T0;
+    return (Tmax-T0)*exp(-0.5*pow(t/sigmaT,2)) + T0;
 }

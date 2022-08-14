@@ -6,7 +6,10 @@ double T0 = 300;
 double Tmax = 6000;
 double sigmaT = 1e-6;
 
-
 //Parámetros químicos:
 int const n_species = 5;
 int const n_reacc = 3;
+
+//Condiciones iniciales
+//Orden: {0, 02}
+double n[n_species] = {0.0,1.0e8,0.0,0.0,0};

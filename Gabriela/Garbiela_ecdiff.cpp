@@ -135,7 +135,7 @@ void derivada(double t,double *y,double TB, double mp,double k,
    M=0.0; //Masa total
 
    while(icont<=NumEsp){
-      M=M+(Masa[icont]*y[Nvar2+icont])/Na;
+      M=M+(Masa[icont]*y[Nvar2+icont])/Na;ntot
       icont=icont+1;
    }
 

@@ -12,11 +12,6 @@
 //void derivada(t,y, dydt);
 //void rk4(y,dydx,x, n_species, h, yout, derivada)
 
-
-//void derivada(double t,double *y, double *dydt);
-
-//void rk4_adap_nTot_controller(double *y, double *dydx, const double t0, const double tfinal, const double h0, const double hmin, double *yout, void (*derivs)(const double, double*, double*))
-
 void rk4(double *y,double *dydx,double x, int Nvar, double h, double *yout, void (*derivada)(const double, double*, double*)){
     
     // Según entiendo, hay un montón de parámetros que se pasan a rk4 que sirven para calcular la función derivada() de Gabriela. Si tales parámetros no fueran necesarios para la cuenta de tal función derivada(), como es mi caso dado que mi problema es más sencillo, entonces no los tengo que pasar.
