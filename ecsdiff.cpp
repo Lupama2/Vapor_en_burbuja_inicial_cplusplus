@@ -5,7 +5,7 @@ Ecuaciones diferenciales.
 
 
 
-void reacciones(double t, double n[], double dndt[]){
+void reacciones(double t, double n[], double r[]){
     /*
     n a priori tiene 5 componentes:
     n = [0, 02, H, OH, H2]
@@ -17,9 +17,6 @@ void reacciones(double t, double n[], double dndt[]){
 
     Calcula dndt[0...n-1] a tiempo t a partir de n[0...n-1].
     */
-
-    //Inicializo variables:
-    double r[28];
 
     double ntot = 0.0;
     for(int i=0; i<n_species; ++i){
@@ -131,6 +128,17 @@ void reacciones(double t, double n[], double dndt[]){
     r[27]=2.8e13*(1.0e-6)*(n[5]/V(t))*(n[7]/V(t))*pow(T(t),0.0)*exp(-16500.0/T(t))/Na;
 
 
+
+
+
+
+}
+
+void derivada(double t, double n[], double dndt[]){
+    double r[28];
+    reacciones(t, n, r);
+
+
     //Cambio de nombre:
     double rf1=r[0];
     double rb1=r[1];
@@ -199,13 +207,7 @@ void reacciones(double t, double n[], double dndt[]){
     // dndt[1]=V(t)*(1.0*(r[0]-r[1]));// + n[1]*dVdt(t)/V(t);
     //La diferencia entre su código y el mío es que yo le puse un -1.0 a dndt[0] = V(t)*(-1.0*(...)) y ella puso -2.0. No sé por qué pondría -2
 
-
-
-}
-
-void derivada(double t, double n[], double dndt[]){
-    //y = dy/dt = derivada()
-    return reacciones(t, n, dndt);
+    return;
 
 }
 

@@ -61,32 +61,19 @@ double h = 1.0e-46; //paso de integración
 // void rkqc(double *y,double *dydx,double *x,int Nvar, double hmin,double htry,double eps,double *yscal, double *hdid,double *hnext, double *yout, void (*derivada)(const double, double*, double*)); //método definido por Gabriela. Creo que es el Método de Runge-Kutta-Fehlberg.
 
 int main(){
-    //DESCONTINUADO:
-    // //Importo la tabla Kappa_qca que contiene la info. de la tabla 2.2.4.1 de la tesis de Gabriela. Guardo la info. en Kappa_tabla
-    // ifstream iFile_Kappa("Kappa_qca.csv");
-    // if(iFile_Kappa) {
-    //     //Importo la 1er fila, allí están los nombres de las variables.
-    //     string cabecera; getline (iFile_Kappa, cabecera);
-    //     //Cargo los demás datos
-    //     string x;
-    //     for(int i = 0; i < n_reacc; ++i){
-    //         for(int j = 0; j < 8; ++j){
-    //             getline(iFile_Kappa, x, '\t');
-    //             Kappa_tabla[i][j] = stod(x);}
-    //         //Último elemento de la fila:
-    //         getline(iFile_Kappa, x, '\n');
-    //         Kappa_tabla[i][8] = stod(x);}
-    // }
 
+    //Creo el vector de nro de partículas y lo inicializo
+    double n[n_species];
+    for(int i = 0; i<n_species;++i){
+        n[i] = n0[i];
+    }
 
-    //Creo el vector de nro de partículas
-    //El vector n[n_species] contiene el nro de partículas de cada especie y está definido en parametros.cpp
     double t=0.0; //Inicializacion del tiempo
     imprimir_nro_particulas(n_species, n, t); //imprimo la cantidad inicial de partículas de cada especie
 
     //Creo el vector de dndt y lo inicializo
     double dndt[n_species];
-    reacciones(t, n, dndt);
+    derivada(t, n, dndt);
     
     //-------------------------------------------------------------------------------------------------------------------------
     //SOLUCIÓN NUMÉRICA empleando rkqc
