@@ -110,7 +110,9 @@ Con la optimización -O3 le tomó 5:30 llegar a
 Con la máxima optimización -Ofast, que involucra cálculos matemáticos con errores, a los 1:50 llegó a
 4.028160651e-007        -40979284.47    532919991       383446120.7     -15744574.77    -52956132.63    998048.7053     -4.912206821    2499.626355     1.000012672
 
-
+Intenté ver si mejoraba cambiando double por float pero
+(1) tardaba más tiempo
+(2) no conservaba la masa
 
 
 
