@@ -54,3 +54,10 @@ g++ -S main.cpp
 g++ -c main.cpp
 g++ -o main.exe main.o
 main.exe
+
+Para optimización
+g++ -Olevel main.cpp -o main.exe
+
+ejemplo:
+g++ -Ofast main.cpp -o main.exe
+main.exe

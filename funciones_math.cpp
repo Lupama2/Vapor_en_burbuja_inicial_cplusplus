@@ -14,7 +14,7 @@ using namespace std;
 
 //#include "parametros.h" //importo los parámetros y sus valores.
 
-double masa(int n_species, double n[]){
+double masa(double *n){
     double m = 0.0;
     for(int i = 0; i < n_species; i++){
         m = m + n[i]*masa_species[i];
@@ -23,15 +23,21 @@ double masa(int n_species, double n[]){
 }
 
 
-void imprimir_nro_particulas(int n_species, double n[],double t){
-    //cout << "t\tH2\tO\tO2\tOH\tH2O\tH2O2\tH02\tmasa" << endl;
-    cout << setprecision(10) << t << "\t";
-    for(int i = 0; i<n_species; ++i){
-        cout << n[i] << "\t";
+void imprimir_nro_particulas(int n_species, double *n,double t, double m0){
+    ofstream file("resultados.dat",std::ios_base::app);
+    //el file tiene que estar abierto
+    if(file.is_open()){
+        cout << setprecision(10) << t << "\t";
+        for(int i = 0; i<n_species; ++i){
+            cout << n[i] << "\t";
+            file << n[i] << "\t";
+        }
+        //double m_conservativa = masa(n_species,n);
+        //cout << endl;
+        cout << masa(n)/m0 << endl;
+        file << masa(n)/m0 << endl;
     }
-    //double m_conservativa = masa(n_species,n);
-    cout << endl;
-    //cout << masa(n_species, n) << endl;
+    
 };
 
 

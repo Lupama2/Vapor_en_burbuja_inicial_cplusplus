@@ -34,9 +34,6 @@ sigmaT //desviación estándar de la distribución normal de la temperatura
 //Defino la matriz Kappa que contendrá la info. de la tabla Kappa_qca
 //double Kappa_tabla[n_reacc][9];
 
-//Parámetros del método numérico
-double h = 1.0e-46; //paso de integración
-
 //Declaro funciones que están definidas en funciones_quimicas.cpp
 #include "funciones_quimica.cpp"
 // double R(double t); //Evolución del radio
@@ -62,41 +59,34 @@ double h = 1.0e-46; //paso de integración
 
 int main(){
 
+
     //Creo el vector de nro de partículas y lo inicializo
-    double n[n_species];
+    double *n = new double[n_species];
     for(int i = 0; i<n_species;++i){
         n[i] = n0[i];
     }
 
     double t=0.0; //Inicializacion del tiempo
-    imprimir_nro_particulas(n_species, n, t); //imprimo la cantidad inicial de partículas de cada especie
-
-    //Creo el vector de dndt y lo inicializo
-    double dndt[n_species];
-    derivada(t, n, dndt);
     
+    //Creo el vector de dndt y lo inicializo
+    double *dndt = new double[n_species];
+    derivada(t, n, dndt);
+
+    //Calculo la masa inicial
+    double m0 = masa(n);
+    
+    //Creo el file en el que voy a ir guardando todo
+    ofstream file("resultados.dat");
+    file << "t\tH2\tO\tO2\tOH\tH2O\tH2O2\tH02\tmasa" << endl;
+
+    imprimir_nro_particulas(n_species, n, t, m0); //imprimo la cantidad inicial de partículas de cada especie
     //-------------------------------------------------------------------------------------------------------------------------
     //SOLUCIÓN NUMÉRICA empleando rkqc
     
-
-    //Temporal integration control
-    double eps=1.0e-7;//error
-    //Gabriela:
-    // double step=1.0e-11; //Time step [s]
-    // double hmin=1.0e-16; //el paso minimo que debe tener en cuenta
-    //Pablo:
-    double step=1.0e-11; //Time step [s]
-    double hmin=1.0e-13; //el paso minimo que debe tener en cuenta
-    // numciclos=1; //numero de ciclos que calcula NO USADO
-    // epsilon=1.0e-6; //Convergence criterion para las cantidades que se calculan con el metodo de biseccion[1]
-    // N=100; // cantidad de pasos utilizados psara integrar la funcion error (ERF())
-
     double htry=step; //Inicializacion del paso optativo
     double hdid=step; // Inicializacion del paso anterior
     double hnext=step; // Inicializacion del paso siguiente
 
-    //Creo el vector nout para guardar los resultados de un único paso del método numérico
-    double nout[n_species];
     //Creo el vectoy yscal y lo inicializo. No sé lo que hace pero el método lo necesita
     double yscal[n_species];
     for(int i = 0; i < n_species; ++i){
@@ -110,18 +100,14 @@ int main(){
     int contador = 0; //contador de pasos. Sirve para imprimir el nro de partículas cada cierto tiempo.
 
     while(t<tfin){
+        //-------------------------------------
+        // Método numérico:
+        //-------------------------------------
         //Hago un paso:
-        rkqc(n,dndt,&t,n_species, hmin, htry, eps, yscal, &hdid, &hnext, nout, derivada);
-        contador = contador + 1;
-
+        rkqc(n,dndt,&t,n_species, hmin, htry, eps, yscal, &hdid, &hnext, n, derivada);
+        
+        //En una versión vieja definía el vector nout, resultado del paso, y luego lo igualaba con el vector n. Ahora eso se hace todo de una dentro de rkqc al entrar como input n en lugar de nout
         htry=hnext;
-
-        //Actualizo los valores:
-        for(int i=0;i<n_species;i++){
-            n[i]=nout[i];
-        }
-        //Los imprimo:
-        if(contador%10000== 0){imprimir_nro_particulas(n_species, n, t);}
 
         //Asumo que lo siguiente no es importante y lo comento. Creo que hace referencia a las variables R, V, T, dVdt,...
         // for(int i=1;i<6;i++)
@@ -138,7 +124,16 @@ int main(){
             yscal[i]=1000000000.0;
         }
 
+        //-------------------------------------
+        contador = contador + 1;
+        //Imprimo el nro de partículas
+        if(contador%10000== 0){imprimir_nro_particulas(n_species, n, t,m0);}
+
+
     }
+
+    delete n;
+    delete dndt;
 
     return 0;
 

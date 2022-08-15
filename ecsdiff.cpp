@@ -5,7 +5,7 @@ Ecuaciones diferenciales.
 
 
 
-void reacciones(double t, double n[], double r[]){
+void reacciones(double t, double n[], double *r){
     /*
     n a priori tiene 5 componentes:
     n = [0, 02, H, OH, H2]
@@ -134,53 +134,24 @@ void reacciones(double t, double n[], double r[]){
 
 }
 
-void derivada(double t, double n[], double dndt[]){
-    double r[28];
+void derivada(double t, double *n, double *dndt){
+    double *r = new double[n_reacc];
     reacciones(t, n, r);
 
 
-    //Cambio de nombre:
-    double rf1=r[0];
-    double rb1=r[1];
-    double rf2=r[2];
-    double rb2=r[3];
-    double rf3=r[4];
-    double rb3=r[5];
-    double rf4=r[6];
-    double rb4=r[7];
-    double rf5=r[8];
-    double rb5=r[9];
-    double rf6=r[10];
-    double rb6=r[11];
-    double rf7=r[12];
-    double rb7=r[13];
-    double rf8=r[14];
-    double rb8=r[15];
-    double rf46=r[16];
-    double rb46=r[17];
-    double rf47=r[18];
-    double rb47=r[19];
-    double rf48=r[20];
-    double rb48=r[21];
-    double rf49=r[22];
-    double rb49=r[23];
-    double rf50=r[24];
-    double rb50=r[25];
-    double rf51=r[26];
-    double rb51=r[27];
 
     
     //Cálculo de dndt
     //1 reacción:
-    // dndt[2]=V(t)*(-2.0*(rf1-rb1));// + n[0]*dVdt(t)/V(t);
-    // dndt[3]=V(t)*(1.0*(rf1-rb1));// + n[1]*dVdt(t)/V(t);
+    // dndt[2]=V(t)*(-2.0*(r[0]-r[1]));// + n[0]*dVdt(t)/V(t);
+    // dndt[3]=V(t)*(1.0*(r[0]-r[1]));// + n[1]*dVdt(t)/V(t);
 
     //3 reacciones:
-    // dndt[0]=V(t)*(-1.0*(rf3-rb3));
-    // dndt[1]=V(t)*(-1.0*(rf2-rb2)+1.0*(rf3-rb3));
-    // dndt[2]=V(t)*(-2.0*(rf1-rb1)-1.0*(rf2-rb2)-1.0*(rf3-rb3));
-    // dndt[3]=V(t)*(1.0*(rf1-rb1));
-    // dndt[4]=V(t)*(+1.0*(rf2-rb2)+1.0*(rf3-rb3));
+    // dndt[0]=V(t)*(-1.0*(r[4]-r[5]));
+    // dndt[1]=V(t)*(-1.0*(r[2]-r[3])+1.0*(r[4]-r[5]));
+    // dndt[2]=V(t)*(-2.0*(r[0]-r[1])-1.0*(r[2]-r[3])-1.0*(r[4]-r[5]));
+    // dndt[3]=V(t)*(1.0*(r[0]-r[1]));
+    // dndt[4]=V(t)*(+1.0*(r[2]-r[3])+1.0*(r[4]-r[5]));
 
     //Todas las reacciones que no involucran N (Nitrógeno):
     //n[0] = y[Nvar2+1] =H2.
@@ -192,14 +163,14 @@ void derivada(double t, double n[], double dndt[]){
     //n[6] = y[Nvar2+18] =H2O2. Este es mi n[6]
     //n[7] = y[Nvar2+19] =HO2
 
-    dndt[0]=V(t)*(-1.0*(rf3-rb3)+1.0*(rf5-rb5)-1.0*(rf7-rb7)+1.0*(rf49-rb49));
-    dndt[1]=V(t)*(-1.0*(rf2-rb2)+1.0*(rf3-rb3)-1.0*(rf4-rb4)-2.0*(rf5-rb5)-1.0*(rf6-rb6)+1.0*(rf7-rb7)-1.0*(rf48-rb48)-1.0*(rf49-rb49));
-    dndt[2]=V(t)*(-2.0*(rf1-rb1)-1.0*(rf2-rb2)-1.0*(rf3-rb3)+1.0*(rf4-rb4)+1.0*(rf8-rb8)-1.0*(rf50-rb50));
-    dndt[3]=V(t)*(1.0*(rf1-rb1)-1.0*(rf4-rb4)+1.0*(rf46-rb46));
-    dndt[4]=V(t)*(+1.0*(rf2-rb2)+1.0*(rf3-rb3)+1.0*(rf4-rb4)-1.0*(rf6-rb6)-1.0*(rf7-rb7)-2.0*(rf8-rb8)+2.0*(rf47-rb47)+1.0*(rf48-rb48)+1.0*(rf50-rb50));
-    dndt[5]=V(t)*(+1.0*(rf6-rb6)+1.0*(rf7-rb7)+1.0*(rf8-rb8)+ 1.0*(rf48-rb48)+1.0*(rf51-rb51));
-    dndt[6]=V(t)*(-1.0*(rf47-rb47)-1.0*(rf48-rb48)-1.0*(rf49-rb49)-1.0*(rf50-rb50)-1.0*(rf51-rb51)+1.0*(rf46-rb46));
-    dndt[7]=V(t)*(-2.0*(rf46-rb46)+1.0*(rf49-rb49)+1.0*(rf50-rb50)+1.0*(rf51-rb51));
+    dndt[0]=V(t)*(-1.0*(r[4]-r[5])+1.0*(r[8]-r[9])-1.0*(r[12]-r[13])+1.0*(r[22]-r[23]));
+    dndt[1]=V(t)*(-1.0*(r[2]-r[3])+1.0*(r[4]-r[5])-1.0*(r[6]-r[7])-2.0*(r[8]-r[9])-1.0*(r[10]-r[11])+1.0*(r[12]-r[13])-1.0*(r[20]-r[21])-1.0*(r[22]-r[23]));
+    dndt[2]=V(t)*(-2.0*(r[0]-r[1])-1.0*(r[2]-r[3])-1.0*(r[4]-r[5])+1.0*(r[6]-r[7])+1.0*(r[14]-r[15])-1.0*(r[24]-r[24]));
+    dndt[3]=V(t)*(1.0*(r[0]-r[1])-1.0*(r[6]-r[7])+1.0*(r[16]-r[17]));
+    dndt[4]=V(t)*(+1.0*(r[2]-r[3])+1.0*(r[4]-r[5])+1.0*(r[6]-r[7])-1.0*(r[10]-r[11])-1.0*(r[12]-r[13])-2.0*(r[14]-r[15])+2.0*(r[18]-r[19])+1.0*(r[20]-r[21])+1.0*(r[24]-r[24]));
+    dndt[5]=V(t)*(+1.0*(r[10]-r[11])+1.0*(r[12]-r[13])+1.0*(r[14]-r[15])+ 1.0*(r[20]-r[21])+1.0*(r[26]-r[27]));
+    dndt[6]=V(t)*(-1.0*(r[18]-r[19])-1.0*(r[20]-r[21])-1.0*(r[22]-r[23])-1.0*(r[24]-r[24])-1.0*(r[26]-r[27])+1.0*(r[16]-r[17]));
+    dndt[7]=V(t)*(-2.0*(r[16]-r[17])+1.0*(r[22]-r[23])+1.0*(r[24]-r[24])+1.0*(r[26]-r[27]));
 
 
     //Código de Pablo (no conserva ALPHA n/V dV/dt)
@@ -207,6 +178,81 @@ void derivada(double t, double n[], double dndt[]){
     // dndt[1]=V(t)*(1.0*(r[0]-r[1]));// + n[1]*dVdt(t)/V(t);
     //La diferencia entre su código y el mío es que yo le puse un -1.0 a dndt[0] = V(t)*(-1.0*(...)) y ella puso -2.0. No sé por qué pondría -2
 
+
+
+
+    //----------------------------------------------------------------------------------------
+
+    //CÓDIGO VIEJO:
+    // double rf1=r[0];
+    // double rb1=r[1];
+    // double rf2=r[2];
+    // double rb2=r[3];
+    // double rf3=r[4];
+    // double rb3=r[5];
+    // double rf4=r[6];
+    // double rb4=r[7];
+    // double rf5=r[8];
+    // double rb5=r[9];
+    // double rf6=r[10];
+    // double rb6=r[11];
+    // double rf7=r[12];
+    // double rb7=r[13];
+    // double rf8=r[14];
+    // double rb8=r[15];
+    // double rf46=r[16];
+    // double rb46=r[17];
+    // double rf47=r[18];
+    // double rb47=r[19];
+    // double rf48=r[20];
+    // double rb48=r[21];
+    // double rf49=r[22];
+    // double rb49=r[23];
+    // double rf50=r[24];
+    // double rb50=r[25];
+    // double rf51=r[26];
+    // double rb51=r[27];
+
+    
+    // //Cálculo de dndt
+    // //1 reacción:
+    // // dndt[2]=V(t)*(-2.0*(rf1-rb1));// + n[0]*dVdt(t)/V(t);
+    // // dndt[3]=V(t)*(1.0*(rf1-rb1));// + n[1]*dVdt(t)/V(t);
+
+    // //3 reacciones:
+    // // dndt[0]=V(t)*(-1.0*(rf3-rb3));
+    // // dndt[1]=V(t)*(-1.0*(rf2-rb2)+1.0*(rf3-rb3));
+    // // dndt[2]=V(t)*(-2.0*(rf1-rb1)-1.0*(rf2-rb2)-1.0*(rf3-rb3));
+    // // dndt[3]=V(t)*(1.0*(rf1-rb1));
+    // // dndt[4]=V(t)*(+1.0*(rf2-rb2)+1.0*(rf3-rb3));
+
+    // //Todas las reacciones que no involucran N (Nitrógeno):
+    // //n[0] = y[Nvar2+1] =H2.
+    // //n[1] = y[Nvar2+2] =H
+    // //n[2] = y[Nvar2+3] =O
+    // //n[3] = y[Nvar2+4] =O2
+    // //n[4] = y[Nvar2+5] =OH
+    // //n[5] = y[Nvar2+6] =H2O = y[4] = vapor
+    // //n[6] = y[Nvar2+18] =H2O2. Este es mi n[6]
+    // //n[7] = y[Nvar2+19] =HO2
+
+    // dndt[0]=V(t)*(-1.0*(rf3-rb3)+1.0*(rf5-rb5)-1.0*(rf7-rb7)+1.0*(rf49-rb49));
+    // dndt[1]=V(t)*(-1.0*(rf2-rb2)+1.0*(rf3-rb3)-1.0*(rf4-rb4)-2.0*(rf5-rb5)-1.0*(rf6-rb6)+1.0*(rf7-rb7)-1.0*(rf48-rb48)-1.0*(rf49-rb49));
+    // dndt[2]=V(t)*(-2.0*(rf1-rb1)-1.0*(rf2-rb2)-1.0*(rf3-rb3)+1.0*(rf4-rb4)+1.0*(rf8-rb8)-1.0*(rf50-rb50));
+    // dndt[3]=V(t)*(1.0*(rf1-rb1)-1.0*(rf4-rb4)+1.0*(rf46-rb46));
+    // dndt[4]=V(t)*(+1.0*(rf2-rb2)+1.0*(rf3-rb3)+1.0*(rf4-rb4)-1.0*(rf6-rb6)-1.0*(rf7-rb7)-2.0*(rf8-rb8)+2.0*(rf47-rb47)+1.0*(rf48-rb48)+1.0*(rf50-rb50));
+    // dndt[5]=V(t)*(+1.0*(rf6-rb6)+1.0*(rf7-rb7)+1.0*(rf8-rb8)+ 1.0*(rf48-rb48)+1.0*(rf51-rb51));
+    // dndt[6]=V(t)*(-1.0*(rf47-rb47)-1.0*(rf48-rb48)-1.0*(rf49-rb49)-1.0*(rf50-rb50)-1.0*(rf51-rb51)+1.0*(rf46-rb46));
+    // dndt[7]=V(t)*(-2.0*(rf46-rb46)+1.0*(rf49-rb49)+1.0*(rf50-rb50)+1.0*(rf51-rb51));
+
+
+    // //Código de Pablo (no conserva ALPHA n/V dV/dt)
+    // // dndt[0]=V(t)*(-1.0*(r[0]-r[1]));// + n[0]*dVdt(t)/V(t);
+    // // dndt[1]=V(t)*(1.0*(r[0]-r[1]));// + n[1]*dVdt(t)/V(t);
+    // //La diferencia entre su código y el mío es que yo le puse un -1.0 a dndt[0] = V(t)*(-1.0*(...)) y ella puso -2.0. No sé por qué pondría -2
+
+
+    delete [] r;
     return;
 
 }
