@@ -28,6 +28,7 @@ void imprimir_nro_particulas(int n_species, double *n,double t, double m0){
     //el file tiene que estar abierto
     if(file.is_open()){
         cout << setprecision(10) << t << "\t";
+        file << setprecision(10) << t << "\t";
         for(int i = 0; i<n_species; ++i){
             cout << n[i] << "\t";
             file << n[i] << "\t";
