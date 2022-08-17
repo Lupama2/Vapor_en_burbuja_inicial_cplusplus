@@ -11,6 +11,8 @@ donde y[Nvar2+6] es el nro de partículas de H20. ¿Tiene sentido la expresión?
 5. Dentro de la función calculamp se usan los valores de TB, y[3] e y[5]. Todos simbolizan la temperatura pero no sé de qué.
 6. mp cambia tiempo a tiempo pero a rkqc no le mando la función calculamp, sino directamente el valor mp en un tiempo.
 
+Ahora no se conserva el nro de partículas, lo cual tiene bastante sentido porque se estarían yendo por la pared.
+
 Estas dudas se suman a las anteriores. Por ej
 1. ¿Qué significa yout?
 2. ¿Qué significan los parámetros step y hmin que forman parte de rkqc?
