@@ -69,9 +69,8 @@ int main(){
     double t=0.0; //Inicializacion del tiempo
 
     //EXTRAS para condensación y evaporación
-    calcula_mp_f();
-
-
+    //No importan los valores de Tli y TB usados porque dentro de la función los cambio
+    double mp = calculamp(mpmin,mpmax, epsilon,N, n, 0,rapidez, T);
 
 
     //Creo el vector de dndt y lo inicializo
@@ -107,21 +106,13 @@ int main(){
 
     while(t<tfin){
 
-        TB = T(t); //realmente debería considerar algún modelo.
-
-
-
-
-        calcula_mp_f();
-
-
-
+        mp = calculamp(mpmin,mpmax, epsilon,N, n, t,rapidez, T);   
 
         //-------------------------------------
         // Método numérico:
         //-------------------------------------
         //Hago un paso:
-        rkqc(n,dndt,&t,n_species, hmin, htry, eps, yscal, &hdid, &hnext, n, derivada);
+        rkqc(n,dndt,&t,mp,n_species, hmin, htry, eps, yscal, &hdid, &hnext, n, derivada);
         
         //En una versión vieja definía el vector nout, resultado del paso, y luego lo igualaba con el vector n. Ahora eso se hace todo de una dentro de rkqc al entrar como input n en lugar de nout
         htry=hnext;

@@ -60,6 +60,20 @@ void imprimir_nro_particulas(int n_species, double *n,double t, double m0, doubl
 };
 
 
+double fact (int n){
+    //Factorial
+   double valor=1;
+   int i;
+
+   if (n==0){
+      valor=1;
+   }
+   else{
+      for (i=1;i<=n;i++) valor=valor*i;
+   }
+   return valor;
+}
+
 double erf(double omega,int N){
     //Función para calcular la función error.
 
@@ -85,36 +99,6 @@ double erf(double omega,int N){
 
 //*********INICIO DE FUNCION QUE CALCULA EL mp**********************************
 
-double calculamp_f(double mpmin,double mpmax,double epsilon, double pvap, double pv,double T,double TLi,double TB,int N, double *n, double t, int rapidez){
-
-        //T: función que calcula la temperatura
-        //Calculo mp = m_punto para la condensación/evaporación
-
-        double TB = T(t); //Creo la variable y la inicializo. Esto tiene que ser cambiado al considerar algún modelo.
-        double ntot = suma_particulas(n_species, n);
-        double v=V(t)/ntot*Na; //volumen molar
-
-        double ngas=ntot-y[Nvar2+6];
-
-        double a = a_Ar*(ngas/ntot)*(ngas/ntot)+2.0*a_Arh2o*(ngas/ntot)*(y[Nvar2+6]/ntot)+
-        a_h2o*(y[Nvar2+6]/ntot)*(y[Nvar2+6]/ntot);
-        //const a de VW promediada con la cantidad de particulas
-
-        double b = b_Ar*(ngas/ntot)*(ngas/ntot)+2.0*b_Arh2o*(ngas/ntot)*(y[Nvar2+6]/ntot)+
-        b_h2o*(y[Nvar2+6]/ntot)*(y[Nvar2+6]/ntot);
-        //const b de VW promediada con la cantidad de particulas
-        
-        double pg=Rg*y[3]/(v-b)-a/(v*v); //presion del gas
-        double pvap=pvap0;
-        double pv=y[Nvar2+6]/ntot*pg; //presion parcial del vapor de agua
-
-        if(rapidez==1)
-            mp=alfaM/sqrt(2.0*3.14159*Rv)*(pvap/sqrt(y[5])-pv/sqrt(TB));
-
-        else
-            mp=calculamp_formal(mpmin,mpmax,epsilon,pvap,pv,y[3],y[5],TB,N);
-
-}
 
 double calculamp_formal(double mpmin,double mpmax,double epsilon, double pvap,
                  double pv,double T,double TLi,double TB,int N){
@@ -166,6 +150,47 @@ double calculamp_formal(double mpmin,double mpmax,double epsilon, double pvap,
 
 
 }
+
+
+double calculamp(double mpmin,double mpmax,double epsilon, int N, double *n, double t, int rapidez, double (*Temp)(double const)){
+
+        //T: función que calcula la temperatura
+        //Calculo mp = m_punto para la condensación/evaporación
+
+        double TB = Temp(t); //Creo la variable y la inicializo. Esto tiene que ser cambiado al considerar algún modelo.
+        double ntot = suma_particulas(n_species, n);
+        double v=V(t)/ntot*Na; //volumen molar
+
+        double ngas=ntot-n[5];  //Antes aparecía y[Nvar2+6] en lugar de n[5]
+
+        double a = a_Ar*(ngas/ntot)*(ngas/ntot)+2.0*a_Arh2o*(ngas/ntot)*(n[5]/ntot)+
+        a_h2o*(n[5]/ntot)*(n[5]/ntot);
+        //const a de VW promediada con la cantidad de particulas
+
+        double b = b_Ar*(ngas/ntot)*(ngas/ntot)+2.0*b_Arh2o*(ngas/ntot)*(n[5]/ntot)+
+        b_h2o*(n[5]/ntot)*(n[5]/ntot);
+        //const b de VW promediada con la cantidad de particulas
+        
+        double y3 = Temp(t); //y[3]
+        double y5 = Temp(t); //y[5]
+        
+
+        double pg=Rg*y3/(v-b)-a/(v*v); //presion del gas
+        double pvap=pvap0;
+        double pv=n[5]/ntot*pg; //presion parcial del vapor de agua
+
+        double mp;
+
+        if(rapidez==1)
+            mp=alfaM/sqrt(2.0*3.14159*Rv)*(pvap/sqrt(y5)-pv/sqrt(TB));
+
+        else
+            mp=calculamp_formal(mpmin,mpmax,epsilon,pvap,pv,y3,y5,TB,N);
+        
+        return mp;
+
+}
+
 
 
 

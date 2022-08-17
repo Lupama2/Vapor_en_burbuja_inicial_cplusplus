@@ -54,7 +54,7 @@ double hmin=1.0e-16; //el paso minimo que debe tener en cuenta
 // double step=1.0e-11; //Time step [s]
 // double hmin=1.0e-14; //el paso minimo que debe tener en cuenta
 // numciclos=1; //numero de ciclos que calcula NO USADO
-// epsilon=1.0e-6; //Convergence criterion para las cantidades que se calculan con el metodo de biseccion[1]
+double epsilon=1.0e-6; //Convergence criterion para las cantidades que se calculan con el metodo de biseccion[1]
 int N=100; // cantidad de pasos utilizados psara integrar la funcion error (ERF())
 
 

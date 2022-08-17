@@ -12,7 +12,7 @@
 //void derivada(t,y, dydt);
 //void rk4(y,dydx,x, n_species, h, yout, derivada)
 
-void rk4(double *y,double *dydx,double x, int Nvar, double h, double *yout, void (*derivada)(const double, double*, double*)){
+void rk4(double *y,double *dydx,double x, double mp, int Nvar, double h, double *yout, void (*derivada)(const double, double*, double*, const double)){
     
     // Según entiendo, hay un montón de parámetros que se pasan a rk4 que sirven para calcular la función derivada() de Gabriela. Si tales parámetros no fueran necesarios para la cuenta de tal función derivada(), como es mi caso dado que mi problema es más sencillo, entonces no los tengo que pasar.
    //A todos los for que en el código de Gabriela comienzan con 1, yo los hago arrancar con 0
@@ -38,12 +38,12 @@ void rk4(double *y,double *dydx,double x, int Nvar, double h, double *yout, void
       yt[i]=y[i]+hh*dydx[i];
 
 
-   derivada(xh,yt,dyt);
+   derivada(xh,yt,dyt, mp);
 
    for(i=0;i<Nvar;i++)
       yt[i]=y[i]+hh*dyt[i];
 
-   derivada(xh,yt,dym);
+   derivada(xh,yt,dym, mp);
 
    for(i=0;i<Nvar;i++){
       yt[i]=y[i]+h*dym[i];
@@ -51,7 +51,7 @@ void rk4(double *y,double *dydx,double x, int Nvar, double h, double *yout, void
    }
 
 
-   derivada(x+h,yt,dyt);
+   derivada(x+h,yt,dyt, mp);
 
 
    for(i=0;i<Nvar;i++)
@@ -66,8 +66,8 @@ void rk4(double *y,double *dydx,double x, int Nvar, double h, double *yout, void
 
 
 
-void rkqc(double *y,double *dydx,double *x,int Nvar, double hmin,double htry,double eps,double *yscal,
-			 double *hdid,double *hnext, double *yout, void (*derivada)(const double, double*, double*)){
+void rkqc(double *y,double *dydx,double *x, double mp, int Nvar, double hmin,double htry,double eps,double *yscal,
+			 double *hdid,double *hnext, double *yout, void (*derivada)(const double, double*, double*, const double)){
 
 
    int i;
@@ -99,19 +99,19 @@ void rkqc(double *y,double *dydx,double *x,int Nvar, double hmin,double htry,dou
 
       hh=0.5*h;
 
-      rk4(ysav,dysav,xsav, Nvar, hh,ytemp, derivada);
+      rk4(ysav,dysav,xsav, mp, Nvar, hh,ytemp, derivada);
 
       *x=xsav+hh;
 
-      derivada(*x,ytemp,dydxp);
+      derivada(*x,ytemp,dydxp, mp);
 
-      rk4(ytemp,dydxp,*x, Nvar, hh,yout, derivada);
+      rk4(ytemp,dydxp,*x, mp, Nvar, hh,yout,  derivada);
 
       *x=xsav+h;
 
       if (*x == xsav) printf("Step size too small in routine RKQC \n");
 
-      rk4(ysav,dysav,xsav, Nvar, h,ytemp, derivada);
+      rk4(ysav,dysav,xsav, mp, Nvar, h,ytemp, derivada);
 
       errmax=0.0;
 
