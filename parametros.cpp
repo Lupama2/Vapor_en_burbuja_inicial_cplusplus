@@ -36,3 +36,8 @@ double hmin=1.0e-16; //el paso minimo que debe tener en cuenta
 // numciclos=1; //numero de ciclos que calcula NO USADO
 // epsilon=1.0e-6; //Convergence criterion para las cantidades que se calculan con el metodo de biseccion[1]
 // N=100; // cantidad de pasos utilizados psara integrar la funcion error (ERF())
+
+
+
+
+terminal = true

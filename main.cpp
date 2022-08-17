@@ -79,7 +79,8 @@ int main(){
     ofstream file("resultados.dat");
     file << "t\tH2\tH\tO\tO2\tOH\tH2O\tH2O2\tH02\tmasa" << endl;
 
-    imprimir_nro_particulas(n_species, n, t, m0); //imprimo la cantidad inicial de partículas de cada especie
+
+    imprimir_nro_particulas(n_species, n, t, m0, 0, archivo, terminal); //imprimo la cantidad inicial de partículas de cada especie
     //-------------------------------------------------------------------------------------------------------------------------
     //SOLUCIÓN NUMÉRICA empleando rkqc
     

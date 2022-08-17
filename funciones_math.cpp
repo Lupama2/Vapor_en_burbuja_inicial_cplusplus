@@ -23,19 +23,20 @@ double masa(double *n){
 }
 
 
-void imprimir_nro_particulas(int n_species, double *n,double t, double m0, string archivo, bool terminal){
+void imprimir_nro_particulas(int n_species, double *n,double t, double m0, double h, string archivo, bool terminal){
     // n_species: nro de especies químicas involucradas
     // n: cantidad de partículas de cada especie
-    // tiempo
-    // masa inicial
+    // t: tiempo
+    // m0: masa inicial
+    // h: paso del método numérico
     // archivo: nombre del archivo donde se guardarán los resultados
     // terminal: true si se quiere imprimir los datos en la terminal y false si no.
 
     ofstream file(archivo,std::ios_base::app);
     //el file tiene que estar abierto
     if(file.is_open()){
-        cout << setprecision(10) << t << T(t) << htry << "\t";
-        file << setprecision(10) << t << T(t) << htry << "\t";
+        cout << setprecision(10) << t << h << T(t) << "\t";
+        file << setprecision(10) << t << h << T(t) << "\t";
         for(int i = 0; i<n_species; ++i){
             cout << n[i] << "\t";
             file << n[i] << "\t";
