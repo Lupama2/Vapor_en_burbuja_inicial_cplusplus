@@ -14,6 +14,16 @@ using namespace std;
 
 //#include "parametros.h" //importo los parámetros y sus valores.
 
+double suma_particulas(int n_species, double *n){
+    //Calcula el nro total de partículas
+    double ntot = 0.0;
+    for(int i = 0; i < n_species; ++i){
+        ntot = ntot + n[i];
+    }
+    return ntot;
+
+}
+
 double masa(double *n){
     double m = 0.0;
     for(int i = 0; i < n_species; i++){
@@ -48,6 +58,115 @@ void imprimir_nro_particulas(int n_species, double *n,double t, double m0, doubl
     }
     
 };
+
+
+double erf(double omega,int N){
+    //Función para calcular la función error.
+
+   double sum=0.0;
+   int i;
+   double valor;
+
+   if (fabs(omega)<4){
+      for(i=0;i<=N;i++)
+         sum=sum+pow(-1.0,i)*pow(omega,2.0*i+1.0)/((2.0*i+1.0)*fact(i));
+      valor=2.0/sqrt(3.14159)*sum;
+   }
+   else {
+      if(omega>=4)
+         valor=1.0;
+      if(omega<=-4)
+         valor=-1.0;
+   }
+
+   return valor;
+
+}
+
+//*********INICIO DE FUNCION QUE CALCULA EL mp**********************************
+
+double calculamp_f(double mpmin,double mpmax,double epsilon, double pvap, double pv,double T,double TLi,double TB,int N, double *n, double t, int rapidez){
+
+        //T: función que calcula la temperatura
+        //Calculo mp = m_punto para la condensación/evaporación
+
+        double TB = T(t); //Creo la variable y la inicializo. Esto tiene que ser cambiado al considerar algún modelo.
+        double ntot = suma_particulas(n_species, n);
+        double v=V(t)/ntot*Na; //volumen molar
+
+        double ngas=ntot-y[Nvar2+6];
+
+        double a = a_Ar*(ngas/ntot)*(ngas/ntot)+2.0*a_Arh2o*(ngas/ntot)*(y[Nvar2+6]/ntot)+
+        a_h2o*(y[Nvar2+6]/ntot)*(y[Nvar2+6]/ntot);
+        //const a de VW promediada con la cantidad de particulas
+
+        double b = b_Ar*(ngas/ntot)*(ngas/ntot)+2.0*b_Arh2o*(ngas/ntot)*(y[Nvar2+6]/ntot)+
+        b_h2o*(y[Nvar2+6]/ntot)*(y[Nvar2+6]/ntot);
+        //const b de VW promediada con la cantidad de particulas
+        
+        double pg=Rg*y[3]/(v-b)-a/(v*v); //presion del gas
+        double pvap=pvap0;
+        double pv=y[Nvar2+6]/ntot*pg; //presion parcial del vapor de agua
+
+        if(rapidez==1)
+            mp=alfaM/sqrt(2.0*3.14159*Rv)*(pvap/sqrt(y[5])-pv/sqrt(TB));
+
+        else
+            mp=calculamp_formal(mpmin,mpmax,epsilon,pvap,pv,y[3],y[5],TB,N);
+
+}
+
+double calculamp_formal(double mpmin,double mpmax,double epsilon, double pvap,
+                 double pv,double T,double TLi,double TB,int N){
+
+    //Hace la cuenta formalmente en base a las ecuaciones 2.2.1.7 y 2.3.1.8
+
+   //epsilon es la tolerancia
+
+   extern double Rv,alfaM;
+   double x,f1,f3;
+   double Gama;
+   double Omega;
+
+
+   if(alfaM > 0){
+      while ((mpmax-mpmin)>epsilon){
+
+         //mp es la resta de los mp de evaporacion y de condensacion
+         Omega=mpmax/pv*sqrt(Rv*T/2.0);
+         Gama=exp(-Omega*Omega)-Omega*sqrt(3.14159)*(1.0-erf(Omega,N));
+
+         f1=mpmax-alfaM/sqrt(2.0*3.14159*Rv)*(pvap/sqrt(TLi)-Gama*pv/sqrt(TB));
+
+         x=(mpmin+mpmax)/2.0;
+
+         Omega=x/pv*sqrt(Rv*T/2.0);
+         Gama=exp(-Omega*Omega)-Omega*sqrt(3.14159)*(1.0-erf(Omega,N));
+
+         f3=x-alfaM/sqrt(2.0*3.14159*Rv)*(pvap/sqrt(TLi)-Gama*pv/sqrt(TB));
+
+         if(f1*f3>0){
+	    mpmax=x;
+         }
+         else{
+            mpmin=x;
+         }
+      }//fin del while
+
+      return x;
+      //devuelve el valor de mp como la raiz de la ecuacion trascendente con tolerancia epsilon
+
+
+   } //fin del if
+
+   else {
+      x=0;
+      return x;
+   }
+
+
+}
+
 
 
 //Descontinuado pero útil para el caso de una única reacción:

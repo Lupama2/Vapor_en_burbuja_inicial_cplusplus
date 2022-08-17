@@ -7,7 +7,7 @@
 #include <fstream> //para leer archivos
 #include <iomanip> //para usar setprecision
 
-#define Na 6.0221367e23 //defino el nro de avogadro
+
 
 using namespace std;
 
@@ -67,10 +67,16 @@ int main(){
     }
 
     double t=0.0; //Inicializacion del tiempo
-    
+
+    //EXTRAS para condensación y evaporación
+    calcula_mp_f();
+
+
+
+
     //Creo el vector de dndt y lo inicializo
     double *dndt = new double[n_species];
-    derivada(t, n, dndt);
+    derivada(t, n, dndt, mp);
 
     //Calculo la masa inicial
     double m0 = masa(n);
@@ -100,6 +106,17 @@ int main(){
     int contador = 0; //contador de pasos. Sirve para imprimir el nro de partículas cada cierto tiempo.
 
     while(t<tfin){
+
+        TB = T(t); //realmente debería considerar algún modelo.
+
+
+
+
+        calcula_mp_f();
+
+
+
+
         //-------------------------------------
         // Método numérico:
         //-------------------------------------

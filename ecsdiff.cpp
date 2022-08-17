@@ -134,13 +134,17 @@ void reacciones(double t, double n[], double *r){
 
 }
 
-void derivada(double t, double *n, double *dndt){
+void derivada(double t, double *n, double *dndt, double mp){
+    // t: tiempo
+    // n: nro de partículas de cada especie
+    // dndt: derivada del nro de partículas de cada especie
+    // TB: temperatura de la mezcla en la superficie de la burbuja. Difiere de la temperatura del líquido.
+    // mp: m punto, flujo neto de evaporación por unidad de área y de tiempo (2.2.1.3 en la tesis de Gabriela)
+
     double *r = new double[n_reacc];
     reacciones(t, n, r);
 
 
-
-    
     //Cálculo de dndt
     //1 reacción:
     // dndt[2]=V(t)*(-2.0*(r[0]-r[1]));// + n[0]*dVdt(t)/V(t);
@@ -172,6 +176,16 @@ void derivada(double t, double *n, double *dndt){
     dndt[6]=V(t)*(-1.0*(r[18]-r[19])-1.0*(r[20]-r[21])-1.0*(r[22]-r[23])-1.0*(r[24]-r[24])-1.0*(r[26]-r[27])+1.0*(r[16]-r[17]));
     dndt[7]=V(t)*(-2.0*(r[16]-r[17])+1.0*(r[22]-r[23])+1.0*(r[24]-r[24])+1.0*(r[26]-r[27]));
 
+    
+
+    dndt[5]=dndt[5] + 4.0*Pi*R(t)*R(t)*(mp*Na/Mh2o); //variacion de la cantidad de particulas
+   //de vapor de agua debido a la condensacion, mas por difusion y reacciones quimicas
+   //(CREO QUE NO ESTÁ CONTENIDA LA DIFUSIÓN)
+
+
+    //No entiendo por qué hace lo siguiente en el archivo Gabriela_ecdiff.cpp
+    // dydt[4]=4.0*pi*y[1]*y[1]*(mp*Na/Mh2o);
+    // dydt[4]=dpgdt; //y luego tira esto sin usar entre medio dydt[4] para calcular cualquier cosa
 
     //Código de Pablo (no conserva ALPHA n/V dV/dt)
     // dndt[0]=V(t)*(-1.0*(r[0]-r[1]));// + n[0]*dVdt(t)/V(t);
@@ -256,25 +270,3 @@ void derivada(double t, double *n, double *dndt){
     return;
 
 }
-
-
-//FUNCIONES DESCONTINUADAS:
-// double Kappa(int j, bool direction, double T_, double Kappa_tabla[][9]){
-//     /*Constante de la cinética química de la reacción j a temperatura T.
-//     direction indica si es forward (0) or backwards (1)
-//     En la tesis de Gabriela esta constante está enflobada en k*T^c*exp(-E/KT)
-//     El orden en los arrays es el orden de las reacciones en la tesis de Gabriela, salteando las que involucran Nitrógeno
-
-//     ESTA FUNCIÓN ESTÁ DESCONTINUADA. NO SE USA PORQUE DECIDÍ COPIAR DIRECTAMENTE LAS REACCIONES DE GABRIELA.
-
-
-//     */
-//     //La matriz se llama Kappa_tabla
-//     if(direction == false)
-//         return Kappa_tabla[j][2]*pow(T_,Kappa_tabla[j][3])*exp(-Kappa_tabla[j][4]/T_)*(1.0e-6)/Na;
-//     if(direction == true)
-//         return Kappa_tabla[j][5]*pow(T_,Kappa_tabla[j][6])*exp(-Kappa_tabla[j][7]/T_)*(1.0e-6)/Na;
-//     else
-//         return 0;
-// }
-
