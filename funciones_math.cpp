@@ -35,8 +35,8 @@ void imprimir_nro_particulas(int n_species, double *n,double t, double m0, doubl
     ofstream file(archivo,std::ios_base::app);
     //el file tiene que estar abierto
     if(file.is_open()){
-        cout << setprecision(10) << t << h << T(t) << "\t";
-        file << setprecision(10) << t << h << T(t) << "\t";
+        cout << setprecision(10) << t << "\t" << h << "\t" << T(t) << "\t";
+        file << setprecision(10) << t << "\t" << h << "\t" << T(t) << "\t";
         for(int i = 0; i<n_species; ++i){
             cout << n[i] << "\t";
             file << n[i] << "\t";

@@ -72,7 +72,7 @@ y contrastar los resultados con datos de bibliografía. Para esto se necesitará
 
 
 
-ANTES:
+-----------------------------------------------------------
 0. Optimizar el código.
 Siempre uso los mismos parametros de Temporal Integration Control
 double step=1.0e-11; //Time step [s]
@@ -114,8 +114,39 @@ Intenté ver si mejoraba cambiando double por float pero
 (1) tardaba más tiempo
 (2) no conservaba la masa
 
+-----------------------------------------------------------
+1. EFECTO DE LA TEMPERATURA:
+Una de las diferencias notables entre mi código y el de Gabriela es la temperatura. Si bien se alcanzan valores del mismo orden de magnitud, en su caso la temperatura se mantiene alta durante menos tiempo. Por otro lado, haciendo tests con una única reacción encontré que a menor temperatura, más grande es el paso h del método numérico, y más rápido corre el código. Quizás esto se deba a que a mayor temperatura, más rápido cambian los nros de partículas de cada especies (peso de la exponencial en la constante de cinética qca) y más chivo tiene que volverse h para que el método numérico registre un error pequeño en el cambio de las variables involucradas.
+
+Esto se podría verificar rápidamente cambiando el parámetro sigmaT de la exponencial. Parámetros de integración iniciales
+double eps=1.0e-7;//error
+double step=1.0e-11; //Time step [s]
+double hmin=1.0e-16; //el paso minimo que debe tener en cuenta
 
 
 
-1. Introducir conservación de masa
-2. Guardar los datos y graficarlos con mathematica
+Con sigmaT = 1e-6 le tomó 1:20 llegar a la línea
+1.27107546e-010 3.77812444e-016 5999.999954     99799567.22     1312349.154     55656.60052     99904455.41     1182270.658     98953083.99     38.81663453     0.1573514013    1
+
+Mientras que con sigmaT = 1e-9 llegó a la línea
+6.350655602e-011        1e-011  5988.517296     99895580.63     672571.3402     29642.37591     99966858.89     536977.6915     99499627.59     17.25253091     0.03172978973   1
+en el mismo tiempo. Fue más lento... Con sigmaT = 1e-12 llegó a la línea
+
+Lo dejé corriendo 1:05:10 bajo estas condiciones y parámetros de temporal integration control de
+double eps=1.0e-7;
+double step=1.0e-11; //Time step [s]
+double hmin=1.0e-14; //el paso minimo que debe tener en cuenta
+y llegó a 
+2.768900284e-007        1e-011  300     56226372.86     174572002.9     2573580.03      101440470.2     76114766.94     18429811.62     428.3302977     39.84467555     1.000000116
+Los resultados se guardan en el archivo
+resultados_sigmaT1e-9.dat
+
+
+en el mismo tiempo. En este caso a los pocos pasos se llegó a 300 K en temperatura.
+8.094871552e-011        1e-011  300     99987414.7      74470.10003     3794.026197     99998100.24     49310.45959     99950695.01     0.008869197322  1.760998479e-007        1
+
+
+
+
+g++ -Ofast main.cpp -o main.exe
+main.exe

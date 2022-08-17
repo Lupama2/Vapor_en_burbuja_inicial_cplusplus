@@ -77,8 +77,7 @@ int main(){
     
     //Creo el file en el que voy a ir guardando todo
     ofstream file("resultados.dat");
-    file << "t\tH2\tH\tO\tO2\tOH\tH2O\tH2O2\tH02\tmasa" << endl;
-
+    file << encabezado << endl;
 
     imprimir_nro_particulas(n_species, n, t, m0, 0, archivo, terminal); //imprimo la cantidad inicial de partículas de cada especie
     //-------------------------------------------------------------------------------------------------------------------------
@@ -128,7 +127,7 @@ int main(){
         //-------------------------------------
         contador = contador + 1;
         //Imprimo el nro de partículas
-        if(contador%1000== 0){imprimir_nro_particulas(n_species, n, t,m0);}
+        if(contador%1000== 0){imprimir_nro_particulas(n_species, n, t,m0, htry, archivo, terminal);}
 
 
     }
