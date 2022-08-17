@@ -130,7 +130,7 @@ Con sigmaT = 1e-6 le tomó 1:20 llegar a la línea
 
 Mientras que con sigmaT = 1e-9 llegó a la línea
 6.350655602e-011        1e-011  5988.517296     99895580.63     672571.3402     29642.37591     99966858.89     536977.6915     99499627.59     17.25253091     0.03172978973   1
-en el mismo tiempo. Fue más lento... Con sigmaT = 1e-12 llegó a la línea
+en el mismo tiempo. Fue más lento...
 
 Lo dejé corriendo 1:05:10 bajo estas condiciones y parámetros de temporal integration control de
 double eps=1.0e-7;
@@ -141,12 +141,10 @@ y llegó a
 Los resultados se guardan en el archivo
 resultados_sigmaT1e-9.dat
 
+Con sigmaT = 1e-12 llegó a la línea
 
-en el mismo tiempo. En este caso a los pocos pasos se llegó a 300 K en temperatura.
 8.094871552e-011        1e-011  300     99987414.7      74470.10003     3794.026197     99998100.24     49310.45959     99950695.01     0.008869197322  1.760998479e-007        1
-
-
-
+en 1:20 minutos:seg. En este caso a los pocos pasos se llegó a 300 K en temperatura.
 
 g++ -Ofast main.cpp -o main.exe
 main.exe
