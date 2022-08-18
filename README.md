@@ -20,6 +20,13 @@ Estas dudas se suman a las anteriores. Por ej
 4. ¿Por qué se conserva el nro de partículas si en teoría faltan agregar términos a las derivadas?
 
 
+Corrí el código con los parámetros de Temportal Integration Control de
+double eps=1.0e-7;//error
+double step=1.0e-11; //Time step [s]
+double hmin=1.0e-16; //el paso minimo que debe tener en cuenta
+
+dio cantidades inifinitas pronto. Pruebo c
+
 
 g++ -Ofast main.cpp -o main.exe
 main.exe
