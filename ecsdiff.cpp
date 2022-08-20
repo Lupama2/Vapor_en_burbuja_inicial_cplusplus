@@ -55,77 +55,77 @@ void reacciones(double t, double n[], double *r){
     // y[1]=Ri; //Inicializacion del radio
     // y[2]=Vi; //Inicializacion de la velocidad
     // y[3]=Tinf; // Inicializacion de la temperatura
-    // nh2o0=Na*pvap0*(4.0/3.0*pi*y[1]*y[1]*y[1])/Rg/(Tinf); //beta*Na*pvap0*(4.0/3.0*3.14159*pow(Rprueba,3.0))/Rg/T0;
+    // nh2o0=Na*pvap0*(4.0/3.0*pi*y[1]*y[1]*y[1])/Rg/(Tinf); //beta*Na*pvap0*(4.0/3.0*3.14159*pow_(Rprueba,3.0))/Rg/T0;
     // y[4]=nh2o0;//cantidad de particulas iniciales de vapor de agua
     // y[5]=Tinf; // Inicializacion de la temperatura de la pared de la burbuja en la cara externa
     //4. Existe otro conjunto de parámetros que están definidos en el código de Gabriela. Yo los copié y pegué arriba para utilizarlos sin problemas.
 
     //(cambios debido a las reacciones)
     //Reacción 1: par es forward, impar es backwards.
-    r[0]=pow(VolExcl,t1)*1.2e17*(1.0e-12)*(ntot/V(t))*(n[0]/V(t))*(n[0]/V(t))*pow(T(t),-1.0)*exp(-0.0/T(t))/Na/Na;
-    r[1]=3.16e19*(1.0e-6)*(ntot/V(t))*(n[1]/V(t))*pow(T(t),-1.3)*exp(-59893.0/T(t))/Na;
+    r[0]=pow_(VolExcl,t1)*1.2e17*(1.0e-12)*(ntot/V(t))*(n[0]/V(t))*(n[0]/V(t))*pow_(T(t),-1.0)*exp(-0.0/T(t))/Na/Na;
+    r[1]=3.16e19*(1.0e-6)*(ntot/V(t))*(n[1]/V(t))*pow_(T(t),-1.3)*exp(-59893.0/T(t))/Na;
 
     //Cargo las reacciones: par es forward, impar es backwards.
 
     //Reacción 1: 
-    r[0]=pow(VolExcl,t1)*1.2e17*(1.0e-12)*(ntot/V(t))*(n[2]/V(t))*(n[2]/V(t))*
-    pow(T(t),-1.0)*exp(-0.0/T(t))/Na/Na;
-    r[1]=3.16e19*(1.0e-6)*(ntot/V(t))*(n[3]/V(t))*pow(T(t),-1.3)*exp(-59893.0/T(t))/Na;
+    r[0]=pow_(VolExcl,t1)*1.2e17*(1.0e-12)*(ntot/V(t))*(n[2]/V(t))*(n[2]/V(t))*
+    pow_(T(t),-1.0)*exp(-0.0/T(t))/Na/Na;
+    r[1]=3.16e19*(1.0e-6)*(ntot/V(t))*(n[3]/V(t))*pow_(T(t),-1.3)*exp(-59893.0/T(t))/Na;
 
     //Reacción 2:
-    r[2]=pow(VolExcl,t2)*5.0e17*(1.0e-12)*(ntot/V(t))*(n[2]/V(t))*(n[1]/V(t))*
-    pow(T(t),-1.0)*exp(-0.0/T(t))/Na/Na;
-    r[3]=3.54e17*(1.0e-6)*(ntot/V(t))*(n[4]/V(t))*pow(T(t),-0.9)*exp(-51217.0/T(t))/Na;
+    r[2]=pow_(VolExcl,t2)*5.0e17*(1.0e-12)*(ntot/V(t))*(n[2]/V(t))*(n[1]/V(t))*
+    pow_(T(t),-1.0)*exp(-0.0/T(t))/Na/Na;
+    r[3]=3.54e17*(1.0e-6)*(ntot/V(t))*(n[4]/V(t))*pow_(T(t),-0.9)*exp(-51217.0/T(t))/Na;
 
     //Reacción 3:
-    r[4]=3.87e4*(1.0e-6)*(n[2]/V(t))*(n[0]/V(t))*pow(T(t),2.7)*exp(-3150.0/T(t))/Na;
-    r[5]=1.79e4*(1.0e-6)*(n[1]/V(t))*(n[4]/V(t))*pow(T(t),2.7)*exp(-2200.0/T(t))/Na;
+    r[4]=3.87e4*(1.0e-6)*(n[2]/V(t))*(n[0]/V(t))*pow_(T(t),2.7)*exp(-3150.0/T(t))/Na;
+    r[5]=1.79e4*(1.0e-6)*(n[1]/V(t))*(n[4]/V(t))*pow_(T(t),2.7)*exp(-2200.0/T(t))/Na;
 
     //Reacción 4:
-    r[6]=2.65e16*(1.0e-6)*(n[1]/V(t))*(n[3]/V(t))*pow(T(t),-0.7)*exp(-8576.0/T(t))/Na;
-    r[7]=9.0e13*(1.0e-6)*(n[2]/V(t))*(n[4]/V(t))*pow(T(t),-0.3)*exp(83.0/T(t))/Na;
+    r[6]=2.65e16*(1.0e-6)*(n[1]/V(t))*(n[3]/V(t))*pow_(T(t),-0.7)*exp(-8576.0/T(t))/Na;
+    r[7]=9.0e13*(1.0e-6)*(n[2]/V(t))*(n[4]/V(t))*pow_(T(t),-0.3)*exp(83.0/T(t))/Na;
 
     //Reacción 5:
-    r[8]=pow(VolExcl,t5)*1.0e18*(1.0e-12)*(ntot/V(t))*(n[1]/V(t))*(n[1]/V(t))*
-    pow(T(t),-1.0)*exp(-0.0/T(t))/Na/Na;
-    r[9]=7.46e17*(1.0e-6)*(ntot/V(t))*(n[0]/V(t))*pow(T(t),-0.8)*exp(-52177.0/T(t))/Na;
+    r[8]=pow_(VolExcl,t5)*1.0e18*(1.0e-12)*(ntot/V(t))*(n[1]/V(t))*(n[1]/V(t))*
+    pow_(T(t),-1.0)*exp(-0.0/T(t))/Na/Na;
+    r[9]=7.46e17*(1.0e-6)*(ntot/V(t))*(n[0]/V(t))*pow_(T(t),-0.8)*exp(-52177.0/T(t))/Na;
 
     //Reacción 6:
-    r[10]=pow(VolExcl,t6)*2.2e22*(1.0e-12)*(ntot/V(t))*(n[1]/V(t))*(n[4]/V(t))*
-    pow(T(t),-2.0)*exp(-0.0/T(t))/Na/Na;
-    r[11]=3.67e23*(1.0e-6)*(ntot/V(t))*(n[5]/V(t))*pow(T(t),-2.0)*exp(-59980.0/T(t))/Na;
+    r[10]=pow_(VolExcl,t6)*2.2e22*(1.0e-12)*(ntot/V(t))*(n[1]/V(t))*(n[4]/V(t))*
+    pow_(T(t),-2.0)*exp(-0.0/T(t))/Na/Na;
+    r[11]=3.67e23*(1.0e-6)*(ntot/V(t))*(n[5]/V(t))*pow_(T(t),-2.0)*exp(-59980.0/T(t))/Na;
 
     //Reacción 7:
-    r[12]=2.16e8*(1.0e-6)*(n[4]/V(t))*(n[0]/V(t))*pow(T(t),1.5)*exp(-1726.0/T(t))/Na;
-    r[13]=5.2e9*(1.0e-6)*(n[1]/V(t))*(n[5]/V(t))*pow(T(t),1.3)*exp(-9529.0/T(t))/Na;
+    r[12]=2.16e8*(1.0e-6)*(n[4]/V(t))*(n[0]/V(t))*pow_(T(t),1.5)*exp(-1726.0/T(t))/Na;
+    r[13]=5.2e9*(1.0e-6)*(n[1]/V(t))*(n[5]/V(t))*pow_(T(t),1.3)*exp(-9529.0/T(t))/Na;
 
     //Reacción 8:
-    r[14]=3.57e4*(1.0e-6)*(n[4]/V(t))*(n[4]/V(t))*pow(T(t),2.4)*exp(-1062.0/T(t))/Na;
-    r[15]=1.74e6*(1.0e-6)*(n[2]/V(t))*(n[5]/V(t))*pow(T(t),2.2)*exp(-7693.0/T(t))/Na;
+    r[14]=3.57e4*(1.0e-6)*(n[4]/V(t))*(n[4]/V(t))*pow_(T(t),2.4)*exp(-1062.0/T(t))/Na;
+    r[15]=1.74e6*(1.0e-6)*(n[2]/V(t))*(n[5]/V(t))*pow_(T(t),2.2)*exp(-7693.0/T(t))/Na;
 
     //Reacción 46: antes numeradas 90 y 91
-    r[16]=3.0e12*(1.0e-6)*(n[7]/V(t))*(n[7]/V(t))*pow(T(t),0.0)*exp(-700.0/T(t))/Na;
-    r[17]=4.53e14*(1.0e-6)*(n[6]/V(t))*(n[3]/V(t))*pow(T(t),-0.39)*exp(-19700.0/T(t))/Na;
+    r[16]=3.0e12*(1.0e-6)*(n[7]/V(t))*(n[7]/V(t))*pow_(T(t),0.0)*exp(-700.0/T(t))/Na;
+    r[17]=4.53e14*(1.0e-6)*(n[6]/V(t))*(n[3]/V(t))*pow_(T(t),-0.39)*exp(-19700.0/T(t))/Na;
 
     //Reacción 47: antes numeradas 92 y 93
-    r[18]=1.2e17*(1.0e-6)*(n[6]/V(t))*(ntot/V(t))*pow(T(t),0.0)*exp(-22900.0/T(t))/Na;
-    r[19]=9.0e5*(1.0e-12)*(ntot/V(t))*(n[4]/V(t))*(n[4]/V(t))*pow(T(t),0.9)*exp(3050.0/T(t))/Na/Na;
+    r[18]=1.2e17*(1.0e-6)*(n[6]/V(t))*(ntot/V(t))*pow_(T(t),0.0)*exp(-22900.0/T(t))/Na;
+    r[19]=9.0e5*(1.0e-12)*(ntot/V(t))*(n[4]/V(t))*(n[4]/V(t))*pow_(T(t),0.9)*exp(3050.0/T(t))/Na/Na;
 
     //Reacción 48: antes numeradas 94 y 95
-    r[20]=3.2e14*(1.0e-6)*(n[6]/V(t))*(n[1]/V(t))*pow(T(t),0.0)*exp(-4510.0/T(t))/Na;
-    r[21]=1.14e9*(1.0e-6)*(n[5]/V(t))*(n[4]/V(t))*pow(T(t),1.36)*exp(-38180.0/T(t))/Na;
+    r[20]=3.2e14*(1.0e-6)*(n[6]/V(t))*(n[1]/V(t))*pow_(T(t),0.0)*exp(-4510.0/T(t))/Na;
+    r[21]=1.14e9*(1.0e-6)*(n[5]/V(t))*(n[4]/V(t))*pow_(T(t),1.36)*exp(-38180.0/T(t))/Na;
 
     //Reacción 49: antes numeradas 96 y 97
-    r[22]=4.82e13*(1.0e-6)*(n[6]/V(t))*(n[1]/V(t))*pow(T(t),0.0)*exp(-4000.0/T(t))/Na;
-    r[23]=1.41e11*(1.0e-6)*(n[0]/V(t))*(n[7]/V(t))*pow(T(t),0.66)*exp(-12320.0/T(t))/Na;
+    r[22]=4.82e13*(1.0e-6)*(n[6]/V(t))*(n[1]/V(t))*pow_(T(t),0.0)*exp(-4000.0/T(t))/Na;
+    r[23]=1.41e11*(1.0e-6)*(n[0]/V(t))*(n[7]/V(t))*pow_(T(t),0.66)*exp(-12320.0/T(t))/Na;
 
     //Reacción 50: antes numeradas 98 y 99
-    r[24]=9.55e6*(1.0e-6)*(n[6]/V(t))*(n[2]/V(t))*pow(T(t),2.0)*exp(-2000.0/T(t))/Na;
-    r[25]=4.62e3*(1.0e-6)*(n[4]/V(t))*(n[7]/V(t))*pow(T(t),2.75)*exp(-9277.0/T(t))/Na;
+    r[24]=9.55e6*(1.0e-6)*(n[6]/V(t))*(n[2]/V(t))*pow_(T(t),2.0)*exp(-2000.0/T(t))/Na;
+    r[25]=4.62e3*(1.0e-6)*(n[4]/V(t))*(n[7]/V(t))*pow_(T(t),2.75)*exp(-9277.0/T(t))/Na;
 
     //Reacción 51: antes numeradas 100 y 101
-    r[26]=1.00e13*(1.0e-6)*(n[6]/V(t))*(n[4]/V(t))*pow(T(t),0.0)*exp(-900.0/T(t))/Na;
-    r[27]=2.8e13*(1.0e-6)*(n[5]/V(t))*(n[7]/V(t))*pow(T(t),0.0)*exp(-16500.0/T(t))/Na;
+    r[26]=1.00e13*(1.0e-6)*(n[6]/V(t))*(n[4]/V(t))*pow_(T(t),0.0)*exp(-900.0/T(t))/Na;
+    r[27]=2.8e13*(1.0e-6)*(n[5]/V(t))*(n[7]/V(t))*pow_(T(t),0.0)*exp(-16500.0/T(t))/Na;
 
 
 
@@ -271,9 +271,9 @@ void derivada(double t, double *n, double *dndt){
 //     */
 //     //La matriz se llama Kappa_tabla
 //     if(direction == false)
-//         return Kappa_tabla[j][2]*pow(T_,Kappa_tabla[j][3])*exp(-Kappa_tabla[j][4]/T_)*(1.0e-6)/Na;
+//         return Kappa_tabla[j][2]*pow_(T_,Kappa_tabla[j][3])*exp(-Kappa_tabla[j][4]/T_)*(1.0e-6)/Na;
 //     if(direction == true)
-//         return Kappa_tabla[j][5]*pow(T_,Kappa_tabla[j][6])*exp(-Kappa_tabla[j][7]/T_)*(1.0e-6)/Na;
+//         return Kappa_tabla[j][5]*pow_(T_,Kappa_tabla[j][6])*exp(-Kappa_tabla[j][7]/T_)*(1.0e-6)/Na;
 //     else
 //         return 0;
 // }

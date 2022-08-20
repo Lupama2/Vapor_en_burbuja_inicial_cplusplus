@@ -14,7 +14,38 @@ using namespace std;
 
 //#include "parametros.h" //importo los parámetros y sus valores.
 
+double pow_(double x, double y){
+//     ofstream file(archivo,std::ios_base::app);
+//    if(x < 0.0 && y != int(y)){
+//       cout << "Error " << endl;
+//       file << endl << "Error "  << endl;
+//       return 0;
+//    }
+//    if(x == 0.0 && y == 0.0){
+//       cout << "Error " << endl;
+//       file << endl << "Error "  << endl;
+//       return 0;
+//    }
 
+//    if(x == 0 && y < 0.0){
+//       cout << "Error " << endl;
+//       file << endl << "Error "  << endl;
+//       return 0;
+//    }
+   return pow(x,y);
+}
+
+void controller(int n_species, double *n){
+    //Controla que no haya cantidades negativas de partículas. Si las hay, salta error
+    ofstream file(archivo,std::ios_base::app);
+    for(int i = 0; i < n_species; i++){
+        if(n[i] < 0.0){
+            cout << endl << "Error " << endl;
+            file << endl << "Error "  << endl;
+        }
+    }
+    return;
+}
 
 double masa(double *n){
     double m = 0.0;
@@ -48,7 +79,8 @@ void imprimir_nro_particulas(int n_species, double *n,double t, double m0, doubl
         cout << masa(n)/m0 << endl;
         file << masa(n)/m0 << endl;
     }
-    
+    controller(n_species, n);
+
 };
 
 

@@ -148,3 +148,6 @@ en 1:20 minutos:seg. En este caso a los pocos pasos se llegó a 300 K en tempera
 
 g++ -Ofast main.cpp -o main.exe
 main.exe
+
+g++ -O3 main.cpp -o main.exe
+main.exe
