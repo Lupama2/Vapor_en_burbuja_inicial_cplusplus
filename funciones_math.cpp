@@ -14,6 +14,8 @@ using namespace std;
 
 //#include "parametros.h" //importo los parámetros y sus valores.
 
+
+
 double masa(double *n){
     double m = 0.0;
     for(int i = 0; i < n_species; i++){
