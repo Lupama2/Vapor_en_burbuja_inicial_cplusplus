@@ -163,12 +163,10 @@ double calculamp(double mpmin,double mpmax,double epsilon, int N, double *n, dou
 
         double ngas=ntot-n[5];  //Antes aparecía y[Nvar2+6] en lugar de n[5]
 
-        double a = a_Ar*(ngas/ntot)*(ngas/ntot)+2.0*a_Arh2o*(ngas/ntot)*(n[5]/ntot)+
-        a_h2o*(n[5]/ntot)*(n[5]/ntot);
+        double a = a_h2o; //a_Ar*(ngas/ntot)*(ngas/ntot)+2.0*a_Arh2o*(ngas/ntot)*(n[5]/ntot) + a_h2o*(n[5]/ntot)*(n[5]/ntot);
         //const a de VW promediada con la cantidad de particulas
 
-        double b = b_Ar*(ngas/ntot)*(ngas/ntot)+2.0*b_Arh2o*(ngas/ntot)*(n[5]/ntot)+
-        b_h2o*(n[5]/ntot)*(n[5]/ntot);
+        double b = b_h2o; //b_Ar*(ngas/ntot)*(ngas/ntot)+2.0*b_Arh2o*(ngas/ntot)*(n[5]/ntot)+  b_h2o*(n[5]/ntot)*(n[5]/ntot);
         //const b de VW promediada con la cantidad de particulas
         
         double y3 = Temp(t); //y[3]

@@ -10,7 +10,7 @@ void reacciones(double t, double n[], double *r){
     n a priori tiene 5 componentes:
     n = [0, 02, H, OH, H2]
 
-    A modo gral:
+    A modo gral:a_Ar
     dn/dt = V*(cambios debido a las reacciones) + n/V dV/dt
     donde V es el volumen de la burbuja y n el nro de partículas de una determinada especie
     Aquí se resumen la parte derecha de la igualdad. La expresión se construye en base a las reacciones listadas en la tesis de Gabriela
