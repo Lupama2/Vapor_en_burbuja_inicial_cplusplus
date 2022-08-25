@@ -1,3 +1,6 @@
+//Evolución de radio y temperatura:
+#include <cmath> //para usar la exponencial
+
 //Defino constantes
 #define Na 6.0221367e23 //defino el nro de avogadro
 #define Pi 3.14159265358979323846 //Defino Pi:
@@ -8,10 +11,7 @@ double R0 = 1e-6;
 double Rmax = 1000e-6;
 double T0 = 300;
 double Tmax = 6000;
-double sigmaT = 1e-6;
-
-//Evolución de radio y temperatura:
-#include <cmath> //para usar la exponencial
+double sigmaT = 1e-9;
 
 double R(double t){
     return ((Rmax-R0)/tmax*t  + R0);}
@@ -19,8 +19,8 @@ double R(double t){
 double V(double t){
     return 4/3 * Pi * pow(R(t),3);}
 
-double dVdt(double t){
-    return 4*Pi*pow(R(t),2)*(Rmax-R0)/tmax;}
+// double dVdt(double t){
+//     return 4*Pi*pow(R(t),2)*(Rmax-R0)/tmax;}
 
 double T(double t){
     return (Tmax-T0)*exp(-0.5*pow(t/sigmaT,2)) + T0;}
@@ -51,8 +51,8 @@ double masa_species[n_species] = {2*masa_H, masa_H, masa_O, 2*masa_O, masa_H + m
 // double hmin=1.0e-16; //el paso minimo que debe tener en cuenta
 //Pablo:
 double eps=1.0e-7;
-double step=1.0e-12; //Time step [s]
-double hmin=1.0e-16; //el paso minimo que debe tener en cuenta
+double step=1.0e-11; //Time step [s]
+double hmin=1.0e-12; //el paso minimo que debe tener en cuenta
 // numciclos=1; //numero de ciclos que calcula NO USADO
 double epsilon=1.0e-6; //Convergence criterion para las cantidades que se calculan con el metodo de biseccion[1]
 int N=100; // cantidad de pasos utilizados psara integrar la funcion error (ERF())
