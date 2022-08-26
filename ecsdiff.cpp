@@ -67,10 +67,14 @@ void reacciones(double t, double n[], double *r){
 
     //Cargo las reacciones: par es forward, impar es backwards.
 
-    //Reacción 1: 
+    //Reacción 1:
+
+
     r[0]=pow(VolExcl,t1)*1.2e17*(1.0e-12)*(ntot/V(t))*(n[2]/V(t))*(n[2]/V(t))*
     pow(T(t),-1.0)*exp(-0.0/T(t))/Na/Na;
     r[1]=3.16e19*(1.0e-6)*(ntot/V(t))*(n[3]/V(t))*pow(T(t),-1.3)*exp(-59893.0/T(t))/Na;
+
+    if(imprimo_test == true){cout << "\n Reaccion O2 -> O + O: " << 3.16e19*(1.0e-6)*pow(T(t),-1.3)*(ntot/V(t))*(1/V(t))*exp(-59893.0/T(t))/Na << endl;}
 
     //Reacción 2:
     r[2]=pow(VolExcl,t2)*5.0e17*(1.0e-12)*(ntot/V(t))*(n[2]/V(t))*(n[1]/V(t))*
@@ -89,6 +93,8 @@ void reacciones(double t, double n[], double *r){
     r[8]=pow(VolExcl,t5)*1.0e18*(1.0e-12)*(ntot/V(t))*(n[1]/V(t))*(n[1]/V(t))*
     pow(T(t),-1.0)*exp(-0.0/T(t))/Na/Na;
     r[9]=7.46e17*(1.0e-6)*(ntot/V(t))*(n[0]/V(t))*pow(T(t),-0.8)*exp(-52177.0/T(t))/Na;
+
+    if(imprimo_test == true){cout << "\n Reaccion con H2 -> H + H: " << 7.46e17*(1.0e-6)*(ntot/V(t))*(1/V(t))*pow(T(t),-0.8)*exp(-52177.0/T(t))/Na << endl;}
 
     //Reacción 6:
     r[10]=pow(VolExcl,t6)*2.2e22*(1.0e-12)*(ntot/V(t))*(n[1]/V(t))*(n[4]/V(t))*

@@ -135,7 +135,7 @@ int main(){
         //-------------------------------------
         contador = contador + 1;
         //Imprimo el nro de partículas
-        if(contador%1000== 0){imprimir_nro_particulas(n_species, n, t,m0, htry, archivo, terminal);}
+        if(contador%10000== 0){imprimir_nro_particulas(n_species, n, t,m0, htry, archivo, terminal);}
 
 
     }
