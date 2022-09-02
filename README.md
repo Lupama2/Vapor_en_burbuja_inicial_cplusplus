@@ -19,3 +19,4 @@ g++ -S ecdiff_Pablo.cpp FUNCIONS_Pablo.cpp PSULSOAR_Pablo.cpp Rkqc_Pablo.cpp Rku
 g++ -c ecdiff_Pablo.cpp FUNCIONS_Pablo.cpp PSULSOAR_Pablo.cpp Rkqc_Pablo.cpp Rkutta4_Pablo.cpp sbsl_Pablo.cpp 
 g++ -o test.exe ecdiff_Pablo.o FUNCIONS_Pablo.o PSULSOAR_Pablo.o Rkqc_Pablo.o Rkutta4_Pablo.o sbsl_Pablo.o 
 
+/test.exe
